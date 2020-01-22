@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://json-schema.org/draft-04/schema#",
+  "title": "htsgetResponse",
+  "type": "object",
+  "$ref": "htsgetResponse.json#/definitions/htsgetResponse",
+
+  "definitions": {
+    "htsgetResponse": {
+      "type": "object",
+      "properties": {
+        "htsget": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string",
+              "enum": [
+                "BAM",
+                "CRAM",
+                "VCF",
+                "BCF"
+              ]
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "$ref": "htsgetUrl.json"
+              }
+            },
+            "md5": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{32}$"
+            }
+          },
+          "required": [
+            "format",
+            "urls"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "htsget"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

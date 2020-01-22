@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://json-schema.org/draft-04/schema#",
+  "title": "htsgetUrl",
+  "type": "object",
+  "$ref": "htsgetUrl.json#/definitions/htsgetUrl",
+
+  "definitions": {
+    "htsgetUrl": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https|data:"
+        },
+        "headers": {
+          "type": "object"
+        },
+        "class": {
+          "type": "string",
+          "enum": [
+            "header",
+            "body"
+          ]
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

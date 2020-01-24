@@ -6,12 +6,14 @@ TEST_GROUPS = {
             {
                 "name": "get htsget ticket 1",
                 "url": c.READS_URL,
-                "obj_id": c.READS_ID_FOUND_1
+                "obj_id": c.READS_ID_FOUND_1,
+                "resp_status": c.STATUS_OK
             },
             {
                 "name": "get htsget ticket 2",
                 "url": c.READS_URL,
-                "obj_id": c.READS_ID_FOUND_2
+                "obj_id": c.READS_ID_FOUND_2,
+                "resp_status": c.STATUS_OK
             }
         ]
     },

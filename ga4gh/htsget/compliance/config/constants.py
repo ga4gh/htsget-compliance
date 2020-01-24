@@ -1,3 +1,11 @@
+# HTTP STATUS CODES
+STATUS_OK = 200
+STATUS_NOT_FOUND = 404
+
+# SCHEMA FILENAMES
+SCHEMA_HTSGET_URL = "htsgetUrl.json"
+SCHEMA_HTSGET_RESPONSE = "htsgetResponse.json"
+
 ENDPOINTS = ["reads", "variants"]
 
 BASE_URL = "{base_url}/"

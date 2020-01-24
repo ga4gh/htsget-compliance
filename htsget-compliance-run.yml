@@ -1,1 +1,2 @@
-orchestrator_url: http://localhost:3000
+testbed_url: http://localhost:3000
+htsget_url: https://htsget.ga4gh.org

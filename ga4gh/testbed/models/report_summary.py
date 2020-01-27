@@ -35,15 +35,42 @@ class ReportSummary(object):
 
         self.run += 1
     
+    def get_run(self):
+        """get run count
+        
+        Returns:
+            int: run count
+        """
+
+        return self.run
+    
     def increment_passed(self):
         """increment pass count by 1"""
 
         self.passed += 1
     
+    def get_passed(self):
+        """get passed count
+
+        Returns:
+            int: passed count
+        """
+
+        return self.passed
+    
     def increment_warned(self):
         """increment warn count by 1"""
 
         self.warned += 1
+    
+    def get_warned(self):
+        """get warn count
+
+        Returns:
+            int: warn count
+        """
+
+        return self.warned
     
     def increment_failed(self):
         """increment fail count by 1"""

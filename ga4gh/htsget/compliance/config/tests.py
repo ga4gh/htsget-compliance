@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""htsget compliance test cases
+
+Attributes:
+    TEST_GROUPS (dict): contains list of test cases by endpoint (reads, 
+        variants). If a web service does not implement either API route, the
+        corresponding test cases will not be run.
+"""
+
 from ga4gh.htsget.compliance.config import constants as c
 
 TEST_GROUPS = {

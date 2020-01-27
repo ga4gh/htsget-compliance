@@ -1,3 +1,23 @@
+# -*- coding: utf-8 -*-
+"""htsget-compliance setup script
+
+Example:
+    Install htsget-compliance::
+
+        $ python setup.py install
+
+Attributes:
+    NAME (str): python package name
+    VERSION (str): python package version number
+    AUTHOR (str): python package author
+    EMAIL (str): author's contact email
+    install_requires (list): dependencies for this package
+
+Todo:
+    
+"""
+
+import codecs
 import setuptools
 
 NAME = "ga4gh-htsget-compliance"
@@ -5,7 +25,6 @@ VERSION = "0.1.0"
 AUTHOR = "Jeremy Adams"
 EMAIL = "jeremy.adams@ga4gh.org"
 
-import codecs
 try:
     codecs.lookup('mbcs')
 except LookupError:

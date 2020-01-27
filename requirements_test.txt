@@ -3,6 +3,8 @@ certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
 coverage==5.0.3
+coveralls==1.10.0
+docopt==0.6.2
 dredd-hooks==0.2.0
 ga4gh-htsget-compliance==0.1.0
 idna==2.8

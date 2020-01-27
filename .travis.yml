@@ -8,3 +8,5 @@ install:
   - python -m pip install -r requirements_test.txt
 script:
   - python -m pytest --cov=ga4gh/ --cov-report=term-missing unittests/
+after_success:
+  - coveralls

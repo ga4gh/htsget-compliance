@@ -77,10 +77,28 @@ class ReportSummary(object):
 
         self.failed += 1
     
+    def get_failed(self):
+        """get fail count
+
+        Returns:
+            int: fail count
+        """
+
+        return self.failed
+    
     def increment_skipped(self):
         """increment skip count by 1"""
 
         self.skipped += 1
+    
+    def get_skipped(self):
+        """get skip count
+
+        Returns:
+            int: skip count
+        """
+
+        return self.skipped
 
     def increment(self, status):
         """increment run and status-specific counts by 1

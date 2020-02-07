@@ -7,24 +7,15 @@ Attributes:
         corresponding test cases will not be run.
 """
 
+import inspect
+import os
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config import methods as m
+from ga4gh.htsget.compliance.config import test_case_property_matrix as tcpm
 
 TEST_GROUPS = {
     "reads": {
-        "cases": [
-            {
-                "name": "get htsget ticket 1",
-                "url": c.READS_URL,
-                "obj_id": c.READS_ID_FOUND_1,
-                "resp_status": c.STATUS_OK
-            },
-            {
-                "name": "get htsget ticket 2",
-                "url": c.READS_URL,
-                "obj_id": c.READS_ID_FOUND_2,
-                "resp_status": c.STATUS_OK
-            }
-        ]
+        "cases": tcpm.construct_reads_test_cases_matrix()
     },
     "variants": {
         "cases": [

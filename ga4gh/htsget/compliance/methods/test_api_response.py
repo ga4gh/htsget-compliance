@@ -12,13 +12,13 @@ from ga4gh.htsget.compliance.config import constants as c
 from ga4gh.htsget.compliance.schema_validator import SchemaValidator
 from ga4gh.testbed.models.report_case import ReportCase
 
-def test_api_response(test_case, config):
+def test_api_response(test_case, kwargs):
     """Makes api request and tests response for compliance
 
     Args:
         test_case (dict): outlines test case name, target url, and expected
             results. expected results include response code.
-        config (dict): web-service specific information, provided on commandline
+        kwargs (dict): web-service specific information, provided on commandline
 
     Returns:
         ReportCase: reports on whether test case was successful or not, and why
@@ -30,12 +30,7 @@ def test_api_response(test_case, config):
     
     try:
         # setup target url from template
-        url_template = test_case['url']
-        url_dict = {
-            "base_url": config["htsget_url"],
-            "obj_id": test_case["obj_id"]
-        }
-        url = url_template.format(**url_dict)
+        url = test_case["urlfunc"](test_case, kwargs)
         
         response = requests.get(url)
         # validate the response status code matches expected according to
@@ -50,6 +45,8 @@ def test_api_response(test_case, config):
         validation_result = sv.validate_instance(response_json)
         if validation_result["status"] == SchemaValidator.FAILURE:
             raise Exception(validation_result["message"])
+
+        report_case.set_status_success()
         
     except Exception as e:
         # any raised exceptions will set the ReportCase status to failure

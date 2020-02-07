@@ -18,21 +18,26 @@ import requests
 import uuid
 from ga4gh.htsget.compliance.config.tests import TEST_GROUPS
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config.test_case_property_matrix \
+    import construct_reads_test_cases_matrix
 from ga4gh.htsget.compliance.methods.test_api_response import test_api_response
+from ga4gh.htsget.compliance.test_case import TestCase
 from ga4gh.testbed.models.report import Report
 from ga4gh.testbed.models.report_group import ReportGroup
 
 @click.command()
-@click.argument("htsget_url")
+@click.argument("htsget-url")
+@click.option('-r', '--reads-base-path',
+              help="base url path to 'reads' requests",
+              default=c.DEFAULT_READS_URLPATH)
+@click.option('-v', '--variants-base-path',
+              help="base url path to 'variants' requests",
+              default=c.DEFAULT_VARIANTS_URLPATH)
 @click.option('-f', '--file', help="report written to output file")
 @click.option('-t', '--testbed-url', 
     help="report submitted as POST request body to GA4GH testbed service")
 def main(**kwargs):
-    """program entrypoint method, runs compliance tests against htsget service
-
-    Args:
-        kwargs (dict): input arguments/options parsed from command line
-    """
+    """run compliance tests against htsget service"""
 
     # create the Report object, initialize with unique report id, and 
     # hardcoded configuration id
@@ -46,13 +51,17 @@ def main(**kwargs):
     # for each endpoint (reads, variants), create an empty ReportGroup. Run all
     # test cases in the associated test group, and add each ReportCase to the 
     # ReportGroup. Finally, summarize ReportGroup and add it to the Report
+
+    reads_test_cases = construct_reads_test_cases_matrix()
+
     for endpoint in c.ENDPOINTS:
         group = ReportGroup()
         group.set_name(endpoint)
         cases = TEST_GROUPS[endpoint]["cases"]
-        for case in cases:
-            case = test_api_response(case, kwargs)
-            group.add_case(case)
+        for case_props in cases:
+            test_case_obj = TestCase(case_props, kwargs)
+            report_case = test_case_obj.execute_test()
+            group.add_case(report_case)
         group.summarize()
         report.add_group(group)
     

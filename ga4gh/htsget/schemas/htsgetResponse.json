@@ -15,6 +15,7 @@
             "format": {
               "type": "string",
               "enum": [
+                "SAM",
                 "BAM",
                 "CRAM",
                 "VCF",

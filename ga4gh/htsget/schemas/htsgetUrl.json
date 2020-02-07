@@ -11,7 +11,7 @@
       "properties": {
         "url": {
           "type": "string",
-          "pattern": "^https|data:"
+          "pattern": "^http|https|data:"
         },
         "headers": {
           "type": "object"

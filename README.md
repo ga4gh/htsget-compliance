@@ -39,6 +39,8 @@ Additional commandline options can be specified to:
 
 A full list of options can be displayed via `htsget-compliance --help`
 
+Requires [`Samtools` suite](http://www.htslib.org/) to be available in your path
+
 ## License
 
 See the [LICENSE](https://github.com/ga4gh/htsget-compliance/blob/master/LICENSE)

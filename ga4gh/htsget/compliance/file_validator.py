@@ -26,9 +26,9 @@ class FileValidator(object):
         s = ""
         if fp.endswith(".sam"):
             s = self.load_sam(fp)
-        elif fp.endswith(".bam"):
-            s = self.load_bam(fp)
-        
+        elif fp.endswith(".bam") or fp.endswith(".cram"):
+            s = self.load_binary(fp)
+
         return s
 
     def load_sam(self, fp):
@@ -46,7 +46,7 @@ class FileValidator(object):
                     s.append("\t".join(ls[:11]))
         return "\n".join(s) + "\n"
 
-    def load_bam(self, fp):
+    def load_binary(self, fp):
         s = []
         for line in os.popen("samtools view " + fp).readlines():
             ls = line.rstrip().split("\t")

@@ -16,7 +16,6 @@ def construct_reads_test_cases_matrix():
         filename = reads_id
         if reads_reference:
             filename += "." + reads_reference
-        filename += ".sam"
         filepath = os.path.join(c.DATA_DIR, "reads", filename)
         return filepath
     
@@ -34,8 +33,8 @@ def construct_reads_test_cases_matrix():
 
     reads_formats = [
         None,
-        c.FORMAT_SAM,
-        c.FORMAT_BAM
+        c.FORMAT_BAM,
+        c.FORMAT_CRAM
     ]
 
     reads_references = [

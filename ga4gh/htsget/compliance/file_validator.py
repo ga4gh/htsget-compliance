@@ -24,9 +24,7 @@ class FileValidator(object):
     def load(self, fp):
 
         s = ""
-        if fp.endswith(".sam"):
-            s = self.load_sam(fp)
-        elif fp.endswith(".bam"):
+        if fp.endswith(".bam"):
             s = self.load_bam(fp)
         
         return s

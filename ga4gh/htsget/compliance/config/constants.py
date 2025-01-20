@@ -34,21 +34,19 @@ ENDPOINTS = ["reads", "variants"]
 
 # URL TEMPLATES
 BASE_URL = "{base_url}"
-DEFAULT_READS_URLPATH = BASE_URL + "/reads"
-DEFAULT_VARIANTS_URLPATH = BASE_URL + "/variants"
+DEFAULT_READS_URLPATH = "/reads/htsgetlambdastack-bucket83908e77-0bbbuwy4lrax/bam"
+DEFAULT_VARIANTS_URLPATH = "/variants/htsgetlambdastack-bucket83908e77-0bbbuwy4lrax/vcf"
 ID_URLPATH = "/{obj_id}"
 
 # OBJECT IDs FOR TEST CASES
-READS_ID_FOUND_1 = "NA30000M"
-READS_ID_FOUND_2 = "10X_P4_0_possorted_genome.bam"
+READS_ID_FOUND_1 = "htsnexus_test_NA12878"
+READS_ID_FOUND_2 = "htsnexus_test_NA12878.bam"
 READS_ID_NOTFOUND_1 = "notfound123456789"
 READS_ID_NOTFOUND_2 = "notfound987654321"
 
 # FILE FORMAT REQUEST PARAMETERS AND EXTENSIONS
-FORMAT_SAM = "SAM"
 FORMAT_BAM = "BAM"
 FORMAT_CRAM = "CRAM"
-EXTENSION_SAM = ".sam"
 EXTENSION_BAM = ".bam"
 EXTENSION_CRAM = ".cram"
 

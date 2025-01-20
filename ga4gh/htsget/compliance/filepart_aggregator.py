@@ -63,7 +63,6 @@ class FilepartAggregator(object):
     def set_output_filepath(self):
         extensions_dict = {
             "BAM": ".bam",
-            "SAM": ".sam",
             "CRAM": ".cram"
         }
         response_body = self.get_response_body()

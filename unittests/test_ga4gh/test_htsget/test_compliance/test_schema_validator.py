@@ -21,7 +21,7 @@ INSTANCE_SUCCESS_0 = {
         "format": "BAM",
         "urls": [
             {
-                "url": "https://htsget.ga4gh.org/file.bam"
+                "url": "https://htsget.ga4gh-demo.org/file.bam"
             }
         ]
     }
@@ -32,14 +32,14 @@ INSTANCE_SUCCESS_1 = {
         "format": "CRAM",
         "urls": [
             {
-                "url": "https://htsget.ga4gh.org/header.bam",
+                "url": "https://htsget.ga4gh-demo.org/header.bam",
                 "headers": {
                     "Authorization": "Bearer abcdef"
                 },
                 "class": "header"
             },
             {
-                "url": "https://htsget.ga4gh.org/body.bam",
+                "url": "https://htsget.ga4gh-demo.org/body.bam",
                 "headers": {
                     "Authorization": "Beader abcdef"
                 },
@@ -56,7 +56,7 @@ INSTANCE_FAIL_1 = {
         "format": "MPEG-G",
         "urls": [
             {
-                "url": "https://htsget.ga4gh.org/header.bam",
+                "url": "https://htsget.ga4gh-demo.org/header.bam",
                 "headers": {
                     "Authorization": "Bearer abcdef"
                 },
@@ -85,14 +85,14 @@ INSTANCE_FAIL_3 = {
         "format": "CRAM",
         "urls": [
             {
-                "url": "https://htsget.ga4gh.org/footer.bam",
+                "url": "https://htsget.ga4gh-demo.org/footer.bam",
                 "headers": {
                     "Authorization": "Bearer abcdef"
                 },
                 "class": "footer"
             },
             {
-                "url": "https://htsget.ga4gh.org/body.bam",
+                "url": "https://htsget.ga4gh-demo.org/body.bam",
                 "headers": {
                     "Authorization": "Beader abcdef"
                 },

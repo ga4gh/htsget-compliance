@@ -1,6 +1,6 @@
 import os
 from ga4gh.htsget.compliance.config import constants as c
-from ga4gh.htsget.compliance.config import methods as m
+from ga4gh.htsget.compliance.config import methods
 
 def construct_reads_test_cases_matrix():
 
@@ -57,7 +57,7 @@ def construct_reads_test_cases_matrix():
                     "name": construct_name(
                         reads_id, reads_format, ''#, reads_reference
                     ),
-                    "url_function": m.FORMAT_READS_URL,
+                    "url_function": methods.FORMAT_READS_URL,
                     "url_params": params,
                     "obj_id": reads_id,
                     "expected_response_status": c.STATUS_OK,

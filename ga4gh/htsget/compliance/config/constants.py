@@ -34,8 +34,8 @@ ENDPOINTS = ["reads", "variants"]
 
 # URL TEMPLATES
 BASE_URL = "{base_url}"
-DEFAULT_READS_URLPATH = "/reads/htsgetlambdastack-bucket83908e77-0bbbuwy4lrax/bam"
-DEFAULT_VARIANTS_URLPATH = "/variants/htsgetlambdastack-bucket83908e77-0bbbuwy4lrax/vcf"
+DEFAULT_READS_URLPATH = "/reads/"
+DEFAULT_VARIANTS_URLPATH = "/variants/"
 ID_URLPATH = "/{obj_id}"
 
 # OBJECT IDs FOR TEST CASES

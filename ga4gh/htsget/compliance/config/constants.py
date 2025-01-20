@@ -52,6 +52,8 @@ EXTENSION_CRAM = ".cram"
 
 # REFERENCE NAMES
 REFERENCE_PHIX = "phix"
+REFERENCE_HG19 = "hg19"
+REFERENCE_CHROM = "11"
 
 DATA_DIR = os.path.join(
     os.path.dirname(

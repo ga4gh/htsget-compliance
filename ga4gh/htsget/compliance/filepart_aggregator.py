@@ -8,7 +8,7 @@ class FilepartAggregator(object):
     def __init__(self, response):
         self.set_response(response)
         self.set_response_body()
-        self.fileparts_dir = ".fileparts"
+        self.fileparts_dir = os.path.abspath(".fileparts")
         if not os.path.exists(self.fileparts_dir):
             os.mkdir(self.fileparts_dir)
         self.set_output_filepath()

@@ -26,23 +26,11 @@ class FileValidator(object):
         s = ""
         if fp.endswith(".bam"):
             s = self.load_bam(fp)
+        else:
+            fp = fp+".bam"
+            s = self.load_bam(fp)
         
         return s
-
-    def load_sam(self, fp):
-        s = []
-        header = True
-        with open(fp, "r") as f:
-            for line in f.readlines():
-                
-                if header:
-                    if not line.startswith("@"):
-                        header = False
-                
-                if not header:
-                    ls = line.rstrip().split("\t")
-                    s.append("\t".join(ls[:11]))
-        return "\n".join(s) + "\n"
 
     def load_bam(self, fp):
         s = []

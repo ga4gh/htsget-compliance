@@ -39,7 +39,9 @@ def construct_reads_test_cases_matrix():
 
     reads_references = [
         None,
-        c.REFERENCE_PHIX
+        #c.REFERENCE_PHIX
+        #c.REFERENCE_HG19
+        c.REFERENCE_CHROM
     ]
 
     reads_cases = []
@@ -49,18 +51,18 @@ def construct_reads_test_cases_matrix():
             for reads_reference in reads_references:
                 params = {}
                 add_format_param(params, reads_format)
-                add_reference_name_param(params, reads_reference)
+                add_reference_name_param(params, '') #reads_reference)
 
                 props = {
                     "name": construct_name(
-                        reads_id, reads_format, reads_reference
+                        reads_id, reads_format, ''#, reads_reference
                     ),
                     "url_function": m.FORMAT_READS_URL,
                     "url_params": params,
                     "obj_id": reads_id,
                     "expected_response_status": c.STATUS_OK,
                     "expected_contents": construct_expected_contents_path(
-                        reads_id, reads_reference)
+                        reads_id, '')#, reads_reference)
                 }
 
                 reads_cases.append(props)

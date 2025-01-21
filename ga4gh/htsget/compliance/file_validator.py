@@ -22,17 +22,14 @@ class FileValidator(object):
         return result
 
     def load(self, fp):
-
         s = ""
-        if fp.endswith(".bam"):
-            s = self.load_bam(fp)
-        else:
-            fp = fp+".bam"
-            s = self.load_bam(fp)
-        
+        if fp.endswith(".bam") or fp.endswith(".cram"):
+            s = self.load_binary(fp)
+
         return s
 
-    def load_bam(self, fp):
+
+    def load_binary(self, fp):
         s = []
         for line in os.popen("samtools view " + fp).readlines():
             ls = line.rstrip().split("\t")

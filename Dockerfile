@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -7,10 +7,8 @@ COPY ga4gh ./ga4gh
 COPY README.md ./
 
 RUN apt-get update -y
-RUN apt-get install -y python3
-RUN apt-get install -y python3-pip
-RUN apt-get install -y nodejs
-RUN apt-get install -y npm
+RUN apt-get install -y python3 python3-pip npm
 RUN python3 -m pip install --upgrade pip
+RUN pip install uv
 RUN npm install dredd --global
-RUN python3 setup.py install
+RUN uv venv && uv pip install .

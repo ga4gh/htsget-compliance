@@ -7,7 +7,7 @@ coveralls==1.10.0
 docopt==0.6.2
 dredd-hooks==0.2.0
 ga4gh-htsget-compliance==0.1.0
-idna==2.8
+idna==3.7
 importlib-metadata==1.4.0
 jsonschema==3.2.0
 more-itertools==8.1.0

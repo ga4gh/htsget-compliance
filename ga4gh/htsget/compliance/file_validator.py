@@ -22,12 +22,22 @@ class FileValidator(object):
         return result
 
     def load(self, fp):
+        file_type = os.popen("htsfile " + fp)
+        ext = ""
         s = ""
-        if fp.endswith(".bam") or fp.endswith(".cram"):
-            s = self.load_binary(fp)
+
+        if 'BAM' in file_type:
+            ext = ".bam"
+        elif 'CRAM' in file_type:
+            ext = ".cram"
+        elif 'VCF' in file_type:
+            ext = ".vcf.gz"
+        elif 'BCF' in file_type:
+            ext = "bcf"
+        else:
+            s = self.load_binary(fp+ext)
 
         return s
-
 
     def load_binary(self, fp):
         s = []

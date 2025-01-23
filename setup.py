@@ -38,7 +38,8 @@ install_requires = [
     'click',
     'dredd_hooks',
     'jsonschema',
-    'requests'
+    'requests',
+    'ga4gh-testbed-lib'
 ]
 
 setuptools.setup(

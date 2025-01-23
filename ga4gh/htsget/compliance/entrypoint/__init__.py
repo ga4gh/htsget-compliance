@@ -24,6 +24,7 @@ from ga4gh.htsget.compliance.methods.test_api_response import test_api_response
 from ga4gh.htsget.compliance.test_case import TestCase
 from ga4gh.testbed.models.report import Report
 from ga4gh.testbed.models.report_group import ReportGroup
+from ga4gh.testbed.submit.report_submitter import ReportSubmitter
 
 @click.command()
 @click.argument("htsget-url")
@@ -34,8 +35,13 @@ from ga4gh.testbed.models.report_group import ReportGroup
               help="base url path to 'variants' requests",
               default=c.DEFAULT_VARIANTS_URLPATH)
 @click.option('-f', '--file', help="report written to output file")
-@click.option('-t', '--testbed-url', 
-    help="report submitted as POST request body to GA4GH testbed service")
+@click.option('-s', '--submit', is_flag = True, help='Submit JSON report to testbedAPI')
+@click.option(
+    '--submit-id', help='report series ID')  
+@click.option(
+    '--submit-token', help='report series token') 
+@click.option(
+    '-t', '--testbed-url', default="http://localhost:4500/reports", help='submit report to GA4GH testbed service')
 def main(**kwargs):
     """run compliance tests against htsget service"""
 
@@ -68,12 +74,22 @@ def main(**kwargs):
     # summarize the Report
     report.finalize()
     
-    # write report to file and/or submit report as POST request to testbed
-    if kwargs["file"] or kwargs["testbed_url"]:
+    # write report to file
+    if kwargs["file"]:
         if kwargs["file"]:
             open(kwargs["file"], 'w').write(str(report))
-        elif kwargs["testbed_url"]:
-            requests.post(kwargs["testbed_url"], json=report.as_json())
+    
+    # submit report to testbed
+    if kwargs["testbed_url"] and kwargs["submit"] and kwargs["submit_id"] and kwargs["submit_token"]:
+        print("Attempting to submit to testbed API...")
+        response = ReportSubmitter.submit_report(kwargs["submit_id"], kwargs["submit_token"], report, url=kwargs["testbed_url"])
+        if response["status_code"] == 200:
+            print("The submission was successful, the report ID is " + response["report_id"])
+        else:
+            print("The submission failed with a status code of " + str(response["status_code"]))
+            print("Error Message: " + str(response["error_message"]))
+        requests.post(kwargs["testbed_url"], json=report.as_json())
+    
     # print report if it's neither written to file or sent to testbed
-    else:
+    if not kwargs["submit"] or not kwargs["file"]:
         print(str(report))

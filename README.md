@@ -19,12 +19,32 @@ cd htsget-compliance
 python setup.py install
 ```
 
+## Quickstart
+
+Running the following:
+
+```shell
+% htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
+```
+
+Should ideally yield:
+
+```json
+{
+  "run": 12,
+  "passed": 12,
+  "warned": 0,
+  "failed": 0,
+  "skipped": 0
+}
+```
+
 ## Usage
 
 The compliance tests can be run via `htsget-compliance ${HTSGET_URL}`, where 
 `HTSGET_URL` is the base url to an htsget service. For example:
 ```
-htsget-compliance https://htsget.ga4gh.org
+htsget-compliance https://htsget.ga4gh-demo.org
 ```
 
 Additional commandline options can be specified to:

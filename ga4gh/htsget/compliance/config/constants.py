@@ -44,8 +44,8 @@ READS_ID_FOUND_2 = "htsnexus_test_NA12878.bam"
 READS_ID_NOTFOUND_1 = "notfound123456789"
 READS_ID_NOTFOUND_2 = "notfound987654321"
 
-VARIANTS_ID_FOUND_1 = "vcf-spec-v4.3"
-VARIANTS_ID_FOUND_2 = "vcf-spec-v4.3.vcf.gz"
+VARIANTS_ID_FOUND_1 = "spec-v4.3"
+VARIANTS_ID_FOUND_2 = "spec-v4.3.vcf.gz"
 VARIANTS_ID_NOTFOUND_1 = "notfoundmeowmeow"
 VARIANTS_ID_NOTFOUND_1 = "notfoundfoobarbaz"
 
@@ -63,6 +63,9 @@ EXTENSION_BCF = ".bcf"
 REFERENCE_PHIX = "phix"
 REFERENCE_HG19 = "hg19"
 REFERENCE_CHROM = "11"
+
+# ENCRYPTION SCHEMES
+ENCRYPTION_SCHEME_CRYPT4GH = "c4gh"  # Specification available at: https://samtools.github.io/hts-specs/crypt4gh.pdf
 
 DATA_DIR = os.path.join(
     os.path.dirname(

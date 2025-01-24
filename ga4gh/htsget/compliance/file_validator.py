@@ -23,6 +23,10 @@ class FileValidator(object):
         # need to read the .fileparts/* logic though and potentially move this function closer there...
         if not "." in fp:
             return "unknown"
+        # FIXME: Also breaks with filenames such as spec-v4.3, i.e:
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
+        # elif basename(fp) == "spec-v4.3":
+        #     return "unknown"
 
         if "local_fs" in source:
             file_type = os.popen("htsfile " + fp)
@@ -86,7 +90,7 @@ class FileValidator(object):
 
         for line in viewer_output:
             ls = line.rstrip().split("\t")
-            s.append("\t".join(ls[:11]))
+            s.append("\t".join(ls[:11])) # TODO: Clean up this a bit? Probably a hashed output would be more reliable and efficient?
         return "\n".join(s) + "\n"
 
     def set_returned_fp(self, returned_fp):

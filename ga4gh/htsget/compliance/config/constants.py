@@ -44,6 +44,11 @@ READS_ID_FOUND_2 = "htsnexus_test_NA12878.bam"
 READS_ID_NOTFOUND_1 = "notfound123456789"
 READS_ID_NOTFOUND_2 = "notfound987654321"
 
+VARIANTS_ID_FOUND_1 = "vcf-spec-v4.3"
+VARIANTS_ID_FOUND_2 = "vcf-spec-v4.3.vcf.gz"
+VARIANTS_ID_NOTFOUND_1 = "notfoundmeowmeow"
+VARIANTS_ID_NOTFOUND_1 = "notfoundfoobarbaz"
+
 # FILE FORMAT REQUEST PARAMETERS AND EXTENSIONS
 FORMAT_BAM = "BAM"
 FORMAT_CRAM = "CRAM"
@@ -51,7 +56,7 @@ FORMAT_VCF = "VCF"
 FORMAT_BCF = "BCF"
 EXTENSION_BAM = ".bam"
 EXTENSION_CRAM = ".cram"
-EXTENSION_VCF = ".vcf.gz"
+EXTENSION_VCF = ".vcf.gz" # Controversial but we'll assume that's the de-facto in 2025 (vs uncompressed .vcf)
 EXTENSION_BCF = ".bcf"
 
 # REFERENCE NAMES

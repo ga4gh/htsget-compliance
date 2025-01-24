@@ -18,8 +18,6 @@ TEST_GROUPS = {
         "cases": tcpm.construct_reads_test_cases_matrix()
     },
     "variants": {
-        "cases": [
-
-        ]
+        "cases": tcpm.construct_variants_test_cases_matrix()
     }
 }

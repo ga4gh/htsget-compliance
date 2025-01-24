@@ -19,6 +19,8 @@ class FileValidator(object):
         ext = ""
         file_type = ""
 
+        # TODO: This check shouldn't be here since htsfile is actually detecting files without extension?
+        # need to read the .fileparts/* logic though and potentially move this function closer there...
         if not "." in fp:
             return "unknown"
 

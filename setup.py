@@ -21,7 +21,7 @@ import codecs
 import setuptools
 
 NAME = "ga4gh-htsget-compliance"
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 AUTHOR = "Jeremy Adams"
 EMAIL = "jeremy.adams@ga4gh.org"
 
@@ -36,7 +36,6 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 install_requires = [
     'click',
-    'dredd_hooks',
     'jsonschema',
     'requests'
 ]
@@ -65,8 +64,7 @@ setuptools.setup(
         htsget-compliance=ga4gh.htsget.compliance.entrypoint:main
     ''',
     classifiers=(
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Natural Language :: English",

@@ -1,7 +1,4 @@
-<img src="https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg" alt="GA4GH Logo" style="width: 400px;"/>
-
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
-[![Travis (.org) branch](https://img.shields.io/travis/ga4gh/htsget-compliance/master.svg?style=flat-square)](https://travis-ci.org/ga4gh/htsget-compliance)
 [![Coverage Status](https://img.shields.io/coveralls/github/ga4gh/htsget-compliance.svg?style=flat-square)](https://coveralls.io/github/ga4gh/htsget-compliance)
 [![Python 3.6](https://img.shields.io/badge/python-3.6%20|%203.7-blue.svg?style=flat-square)](https://www.python.org)
 
@@ -22,12 +19,32 @@ cd htsget-compliance
 python setup.py install
 ```
 
+## Quickstart
+
+Running the following:
+
+```shell
+% htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
+```
+
+Should ideally yield:
+
+```json
+{
+  "run": 12,
+  "passed": 12,
+  "warned": 0,
+  "failed": 0,
+  "skipped": 0
+}
+```
+
 ## Usage
 
 The compliance tests can be run via `htsget-compliance ${HTSGET_URL}`, where 
 `HTSGET_URL` is the base url to an htsget service. For example:
 ```
-htsget-compliance https://htsget.ga4gh.org
+htsget-compliance https://htsget.ga4gh-demo.org
 ```
 
 Additional commandline options can be specified to:

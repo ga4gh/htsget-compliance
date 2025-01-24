@@ -3,12 +3,14 @@ import json
 import requests
 import shutil
 
+from ga4gh.htsget.compliance.config import constants as c
+
 class FilepartAggregator(object):
     
     def __init__(self, response):
         self.set_response(response)
         self.set_response_body()
-        self.fileparts_dir = ".fileparts"
+        self.fileparts_dir = os.path.abspath(".fileparts")
         if not os.path.exists(self.fileparts_dir):
             os.mkdir(self.fileparts_dir)
         self.set_output_filepath()
@@ -62,9 +64,10 @@ class FilepartAggregator(object):
     
     def set_output_filepath(self):
         extensions_dict = {
-            "BAM": ".bam",
-            "SAM": ".sam",
-            "CRAM": ".cram"
+            c.FORMAT_BAM: c.EXTENSION_BAM,
+            c.FORMAT_CRAM: c.EXTENSION_CRAM,
+            c.FORMAT_VCF: c.EXTENSION_VCF,
+            c.FORMAT_BCF: c.EXTENSION_BCF,
         }
         response_body = self.get_response_body()
         extension = extensions_dict[response_body["htsget"]["format"].upper()]

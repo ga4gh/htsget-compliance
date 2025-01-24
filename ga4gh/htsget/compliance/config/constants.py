@@ -34,26 +34,38 @@ ENDPOINTS = ["reads", "variants"]
 
 # URL TEMPLATES
 BASE_URL = "{base_url}"
-DEFAULT_READS_URLPATH = BASE_URL + "/reads"
-DEFAULT_VARIANTS_URLPATH = BASE_URL + "/variants"
+DEFAULT_READS_URLPATH = "/reads"
+DEFAULT_VARIANTS_URLPATH = "/variants"
 ID_URLPATH = "/{obj_id}"
 
 # OBJECT IDs FOR TEST CASES
-READS_ID_FOUND_1 = "NA30000M"
-READS_ID_FOUND_2 = "10X_P4_0_possorted_genome.bam"
+READS_ID_FOUND_1 = "htsnexus_test_NA12878"
+READS_ID_FOUND_2 = "htsnexus_test_NA12878.bam"
 READS_ID_NOTFOUND_1 = "notfound123456789"
 READS_ID_NOTFOUND_2 = "notfound987654321"
 
+VARIANTS_ID_FOUND_1 = "spec-v4.3"
+VARIANTS_ID_FOUND_2 = "spec-v4.3.vcf.gz"
+VARIANTS_ID_NOTFOUND_1 = "notfoundmeowmeow"
+VARIANTS_ID_NOTFOUND_1 = "notfoundfoobarbaz"
+
 # FILE FORMAT REQUEST PARAMETERS AND EXTENSIONS
-FORMAT_SAM = "SAM"
 FORMAT_BAM = "BAM"
 FORMAT_CRAM = "CRAM"
-EXTENSION_SAM = ".sam"
+FORMAT_VCF = "VCF"
+FORMAT_BCF = "BCF"
 EXTENSION_BAM = ".bam"
 EXTENSION_CRAM = ".cram"
+EXTENSION_VCF = ".vcf.gz" # Controversial but we'll assume that's the de-facto in 2025 (vs uncompressed .vcf)
+EXTENSION_BCF = ".bcf"
 
 # REFERENCE NAMES
 REFERENCE_PHIX = "phix"
+REFERENCE_HG19 = "hg19"
+REFERENCE_CHROM = "11"
+
+# ENCRYPTION SCHEMES
+ENCRYPTION_SCHEME_CRYPT4GH = "c4gh"  # Specification available at: https://samtools.github.io/hts-specs/crypt4gh.pdf
 
 DATA_DIR = os.path.join(
     os.path.dirname(

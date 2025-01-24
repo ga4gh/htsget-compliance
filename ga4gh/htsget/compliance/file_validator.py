@@ -11,20 +11,40 @@ class FileValidator(object):
         self.set_returned_fp(returned_fp)
         self.set_expected_fp(expected_fp)
 
-    def identify_file_type(self, fp, source):
+    def identify_file(self, fp, source) -> str:
         '''
         source = from htsget or from (local) filesystem
+        returns: file extension string
         '''
+        ext = ""
+        file_type = ""
+
+        if not "." in fp:
+            return "unknown"
 
         if "local_fs" in source:
-            return os.popen("htsfile " + fp)
+            file_type = os.popen("htsfile " + fp)
 
         # Samtools' hstfile does not (yet) support (detailed?) htsget file identification ¯\_(ツ)_/¯
         #
         # % htsfile https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878
         # https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878:      htsget text
         elif "htsget" in source:
-            return requests.get(fp).json()["htsget"]["format"]
+            file_type = requests.get(fp).json()["htsget"]["format"]
+
+        # Determine the actual format and suitable extension
+        if c.FORMAT_BAM in file_type:
+            ext = c.EXTENSION_BAM
+        elif c.FORMAT_CRAM in file_type:
+            ext = c.EXTENSION_CRAM
+        elif c.FORMAT_VCF in file_type:
+            ext = c.EXTENSION_VCF
+        elif c.FORMAT_BCF in file_type:
+            ext = c.EXTENSION_BCF
+        else:
+            ext = ".unknown_file_format"
+        
+        return ext
 
     def validate(self):
 
@@ -38,32 +58,22 @@ class FileValidator(object):
         
         return result
 
-    def load(self, fp):
-        file_type = ""
-        ext = ""
+    def load(self, fp) -> str:
+        extension = ""
         samtools_string = ""
 
         if "http" in fp:
-            file_type = self.identify_file_type(fp, "htsget")
+            extension = self.identify_file(fp, "htsget")
         else:
-            file_type = self.identify_file_type(fp, "local_fs")
+            extension = self.identify_file(fp, "local_fs")
 
-
-        if c.FORMAT_BAM in file_type:
-            ext = c.EXTENSION_BAM
-        elif c.FORMAT_CRAM in file_type:
-            ext = c.EXTENSION_CRAM
-        elif c.FORMAT_VCF in file_type:
-            ext = c.EXTENSION_VCF
-        elif c.FORMAT_BCF in file_type:
-            ext = c.EXTENSION_BCF
-        else:
-            samtools_string = self.load_binary(fp+ext)
+        if not "unknown" in extension:
+            samtools_string = self.load_binary(fp+extension)
 
         return samtools_string
 
 
-    def load_binary(self, fp):
+    def load_binary(self, fp) -> str:
         s = []
         for line in os.popen("samtools view " + fp).readlines():
             ls = line.rstrip().split("\t")

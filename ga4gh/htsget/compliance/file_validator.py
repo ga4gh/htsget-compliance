@@ -77,7 +77,14 @@ class FileValidator(object):
 
     def load_binary(self, fp) -> str:
         s = []
-        for line in os.popen("samtools view " + fp).readlines():
+        viewer_ouput = ""
+
+        if "bcf" in fp:
+            viewer_ouput = os.popen("bcftools view " + fp).readlines()
+        else:
+            viewer_output = os.popen("samtools view " + fp).readlines()
+
+        for line in viewer_output:
             ls = line.rstrip().split("\t")
             s.append("\t".join(ls[:11]))
         return "\n".join(s) + "\n"

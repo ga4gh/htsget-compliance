@@ -1,6 +1,10 @@
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status][actions-badge]][actions-url]
 [![Coverage Status](https://img.shields.io/coveralls/github/ga4gh/htsget-compliance.svg?style=flat-square)](https://coveralls.io/github/ga4gh/htsget-compliance)
-[![Python 3.6](https://img.shields.io/badge/python-3.6%20|%203.7-blue.svg?style=flat-square)](https://www.python.org)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg?style=flat-square)](https://www.python.org)
+
+[actions-badge]: https://github.com/ga4gh/htsget-compliance/actions/workflows/test.yml/badge.svg
+[actions-url]: https://github.com/ga4gh/htsget-compliance/actions?query=workflow%3Atest+branch%3Amaster
 
 # htsget Compliance
 The htsget Compliance Suite determines a web service's compliance with the 

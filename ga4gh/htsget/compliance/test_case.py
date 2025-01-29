@@ -4,6 +4,7 @@
 import json
 import requests
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config import methods
 from ga4gh.htsget.compliance.schema_validator import SchemaValidator
 from ga4gh.htsget.compliance.file_validator import FileValidator
 from ga4gh.htsget.compliance.filepart_aggregator import FilepartAggregator
@@ -53,7 +54,10 @@ class TestCase(object):
             params = self.get_url_params()
             report_case.add_debug_msg("URL: " + url)
             report_case.add_debug_msg("PARAMS: " + str(params))
-            response = requests.get(url, params=params)
+            # Handle multiple urls and "data:" url types
+            payload, return_codes = methods.get_urls_concatenate_output(url, params)
+            response = return_codes.pop()
+            # FIXME: Refactor the following methods accordingly
             self.validate_response_code(response)
             self.validate_response_schema(response)
             self.validate_file_contents(response)

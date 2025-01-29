@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""static methods"""
 
+import base64
+import requests
 from ga4gh.htsget.compliance.config import constants as c
 
 def format_url(test_case, kwargs, use_reads=True):
@@ -28,30 +29,41 @@ def get_urls_concatenate_output(url: str, params) -> (bytes, list):
         multiple urls where some of those urls contain base64-encoded
         data.
 
-        returns: Tuple with concatenated payload and a list of return codes.
+        returns: Tuple with concatenated payload and a list of all responses from all URLs,
+                 including embedded data:;<base64> urls.
     '''
-    response = requests.get(url, params=params)
+    # Toplevel htsget endpoint query, does not need headers for ranges
+    try:
+        response = requests.get(url, params=params)
+    except:
+        raise Exception("Perhaps more data:; stuff?")
     data = response.json()
 
     urls = data.get("htsget", {}).get("urls", [])
     concatenated_data = b""
-    status_codes = []
+    all_responses = []
 
     # First response will be the "top level" htsget request itself
-    status_codes.append(response)
+    all_responses.append(response)
 
     for entry in urls:
-        file_url = entry.get("url")
-        if file_url.startswith(("http://", "https://")):
-            file_response = requests.get(file_url, params=params)
-            concatenated_data += file_response.content
-            status_codes.append(file_response.status_code)
-        elif file_url.startswith("data:;base64,"):
-            base64_data = file_url.split("data:;base64,")[-1]
+        url = entry.get("url")
+        if url.startswith(("http://", "https://")):
+            headers = entry.get("headers", {})
+            response = requests.get(url, headers=headers, params=params)
+            # if not (200 <= response.status_code <= 308):
+            #     raise Exception(f"Failed to fetch {url}: {response.status_code}")
+            concatenated_data += response.content
+            all_responses.append(response)
+        elif url.startswith("data:;base64,"):
+            base64_data = url.split("data:;base64,")[-1]
             concatenated_data += base64.b64decode(base64_data)
-            status_codes.append(200)  # Assume success for data URIs
+            # Assume success for data URIs
+            phony_response = requests.Response
+            phony_response.status_code=200
+            all_responses.append(phony_response)
 
-    return concatenated_data, status_codes
+    return concatenated_data, all_responses
 
 FORMAT_READS_URL = format_reads_url
 FORMAT_VARIANTS_URL = format_variants_url

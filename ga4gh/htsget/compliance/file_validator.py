@@ -1,6 +1,8 @@
 import os
 import requests
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config import methods
+import tempfile
 
 class FileValidator(object):
 
@@ -15,7 +17,7 @@ class FileValidator(object):
         ''' Identifies encryption scheme
         '''
         encryption_scheme = None
-        encryption_scheme = os.popen("htsfile " + returned_filepath)
+        encryption_scheme = os.popen("htsfile " + fp)
         if "crypt4gh data" in encryption_scheme:
             encryption_scheme = c.ENCRYPTION_SCHEME_CRYPT4GH
         # Must be last statement if no scheme is found above
@@ -43,23 +45,20 @@ class FileValidator(object):
         #     return "unknown"
 
         if "local_fs" in source:
-            file_type = os.popen("htsfile " + fp)
-            encryption_scheme = is_encrypted_with(returned_filepath)
+            encryption_scheme = self.is_encrypted_with(fp)
 
         # Samtools' hstfile does not (yet) support (detailed?) htsget file identification ¯\_(ツ)_/¯
         #
         # % htsfile https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878
         # https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878:      htsget text
         elif "htsget" in source:
-            response = requests.get(fp).json()
-            file_type = response["htsget"]["format"]
+            file_payload, responses = methods.get_urls_concatenate_output(fp).json()
+            file_type = responses[0]["htsget"]["format"] # First response code is from htsget endpoint itself
 
-            # Handle cases where there are more than 1 url in the response and/or "data:" segments 
-            aggregator = FilepartAggregator(response)
-            aggregator.aggregate()
-            returned_filepath = aggregator.get_output_filepath()
-
-            encryption_scheme = is_encrypted_with(returned_filepath)
+            with tempfile.NamedTemporaryFile(delete=True) as temp_file:
+                temp_file.write(file_payload.encode())
+                temp_file.flush()
+                encryption_scheme = self.is_encrypted_with(temp_file.name)
 
 
         # Determine the actual format and suitable extension

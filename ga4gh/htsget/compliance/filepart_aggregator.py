@@ -4,6 +4,7 @@ import requests
 import shutil
 
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config import methods
 
 class FilepartAggregator(object):
     
@@ -15,36 +16,42 @@ class FilepartAggregator(object):
             os.mkdir(self.fileparts_dir)
         self.set_output_filepath()
 
-    def aggregate(self):
+    def aggregate(self, url=None):
 
-        response_body = self.get_response_body()
-        i = 0
-        for url_obj in response_body["htsget"]["urls"]:
-            url = url_obj["url"]
-            headers = url_obj["headers"] \
-                      if "headers" in url_obj.keys() \
-                      else None
+        # response_body = self.get_response_body()
+        # i = 0
+        # for url_obj in response_body["htsget"]["urls"]:
+        #     url = url_obj["url"]
+        #     headers = url_obj["headers"] \
+        #               if "headers" in url_obj.keys() \
+        #               else None
             
-            self.download_filepart(url, headers=headers, idx=i)
-            i += 1
+        #     self.download_filepart(url, headers=headers, params=params, idx=i)
+        #     i += 1
         
-        self.aggregate_fileparts()
+        # self.aggregate_fileparts()
+        self.download_filepart(url, headers=headers, params=params)
 
-    def download_filepart(self, url, headers=None, idx=0):
+    def download_filepart(self, url, headers=None, params=None, idx=0):
         filepath = self.get_filepart_path(idx)
         with open(filepath, 'wb') as f:
-            with requests.get(url, headers=headers, stream=True) as r:
-                for chunk in r.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
+            try:
+                # with requests.get(url, headers=headers, stream=True) as r:
+                #     for chunk in r.iter_content(chunk_size=8192):
+                #         if chunk:
+                #             f.write(chunk)
+                payload, _ = methods.get_urls_concatenate_output(url, headers=headers, params=params)
+                f.write(payload)
+            except:
+                raise Exception("Failed to fetch and/or concatenate file")
     
-    def aggregate_fileparts(self):
+    # def aggregate_fileparts(self):
         
-        with open(self.get_output_filepath(), 'wb') as wfd:
-            for i in range(0, self.nfileparts):
-                filepath = self.get_filepart_path(i)
-                with open(filepath, 'rb') as fd:
-                    shutil.copyfileobj(fd, wfd)
+    #     with open(self.get_output_filepath(), 'wb') as wfd:
+    #         for i in range(0, self.nfileparts):
+    #             filepath = self.get_filepart_path(i)
+    #             with open(filepath, 'rb') as fd:
+    #                 shutil.copyfileobj(fd, wfd)
 
     def get_filepart_path(self, idx):
         return os.path.join(self.fileparts_dir, "{}.filepart".format(idx))

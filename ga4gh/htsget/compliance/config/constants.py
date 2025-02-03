@@ -49,6 +49,11 @@ VARIANTS_ID_FOUND_2 = "spec-v4.3.vcf.gz"
 VARIANTS_ID_NOTFOUND_1 = "notfoundmeowmeow"
 VARIANTS_ID_NOTFOUND_1 = "notfoundfoobarbaz"
 
+## Crypt4GH
+PUBLIC_KEY_CRYPT4GH = "alice.pub"
+PRIVATE_KEY_CRYPT4GH = "bob.sec"
+EXTENSION_C4GH = ".c4gh"
+
 # FILE FORMAT REQUEST PARAMETERS AND EXTENSIONS
 FORMAT_BAM = "BAM"
 FORMAT_CRAM = "CRAM"
@@ -56,7 +61,7 @@ FORMAT_VCF = "VCF"
 FORMAT_BCF = "BCF"
 EXTENSION_BAM = ".bam"
 EXTENSION_CRAM = ".cram"
-EXTENSION_VCF = ".vcf.gz" # Controversial but we'll assume that's the de-facto in 2025 (vs uncompressed .vcf)
+EXTENSION_VCF = ".vcf.gz" # We'll assume that's the de-facto standard in 2025 (vs uncompressed .vcf)
 EXTENSION_BCF = ".bcf"
 
 # REFERENCE NAMES

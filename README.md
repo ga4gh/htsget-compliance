@@ -16,8 +16,17 @@ institutions.
 
 ## Installation
 
-To install, clone the Github repository, then install via setuptools:
+First, required pre-requisites are [`samtools`, `bcftools`, `htsfile`](https://www.htslib.org/) and `crypt4gh` are assumed to be pre-installed in the system, i.e:
+
+```shell
+apt-get install samtools uv  (OSX: brew install samtools uv)
+uv venv .
+pip install crypt4gh
 ```
+To install `htsget-compliance`, clone the Github repository, then install via setuptools:
+
+```
+source .venv/bin/activate
 git clone https://github.com/ga4gh/htsget-compliance.git
 cd htsget-compliance
 python setup.py install
@@ -59,8 +68,6 @@ Additional commandline options can be specified to:
 * etc.
 
 A full list of options can be displayed via `htsget-compliance --help`
-
-Requires [`Samtools` suite](http://www.htslib.org/) to be available in your path
 
 ## License
 

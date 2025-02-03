@@ -48,23 +48,24 @@ def construct_reads_test_cases_matrix():
         c.FORMAT_CRAM,
     ]
 
-    reads_references = [
-        None,
-        #c.REFERENCE_PHIX,
-        #c.REFERENCE_HG19,
-        c.REFERENCE_CHROM,
-    ]
+    # reads_references = [
+    #     #None,
+    #     #c.REFERENCE_PHIX,
+    #     #c.REFERENCE_HG19,
+    #     c.REFERENCE_CHROM,
+    # ]
 
     reads_cases = []
 
     for reads_id in reads_ids:
         for reads_format in reads_formats:
-            for reads_reference in reads_references:
+            #for reads_reference in reads_references:
                 for encryption_scheme in encryption_schemes:
                     params = {}
                     add_format_param(params, reads_format)
-                    add_reference_name_param(params, '') #reads_reference)
-                    add_encryption_scheme_param(params, encryption_scheme)
+                    #add_reference_name_param(params, '') #reads_reference)
+                    if encryption_scheme is not None:
+                        add_encryption_scheme_param(params, encryption_scheme)
 
                     props = {
                         "name": construct_name(
@@ -121,21 +122,22 @@ def construct_variants_test_cases_matrix():
         c.FORMAT_BCF
     ]
 
-    variants_references = [
-        None,
-        c.REFERENCE_CHROM
-    ]
+    # variants_references = [
+    #     None,
+    #     c.REFERENCE_CHROM
+    # ]
 
     variants_cases = []
 
     for variants_id in variants_ids:
         for variants_format in variants_formats:
-            for variants_reference in variants_references:
+            #for variants_reference in variants_references:
                 for encryption_scheme in encryption_schemes:
                     params = {}
                     add_format_param(params, variants_format)
-                    add_reference_name_param(params, '') #variants_reference)
-                    add_encryption_scheme_param(params, encryption_scheme)
+                    #add_reference_name_param(params, '') #variants_reference)
+                    if encryption_scheme is not None:
+                        add_encryption_scheme_param(params, encryption_scheme)
 
                     props = {
                         "name": construct_name(

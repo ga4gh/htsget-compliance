@@ -35,18 +35,19 @@ class FileValidator(object):
         file_type = None
         encryption_scheme = None
 
-        # TODO: This check shouldn't be here since htsfile is actually detecting files without extension?
-        # need to read the .fileparts/* logic though and potentially move this function closer there...
-        if "." not in fp:
-            return "unknown"
-
-        # FIXME: Also breaks with filenames such as spec-v4.3, i.e:
+        # FIXME:
+        # (...)
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
         # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
-        # elif basename(fp) == "spec-v4.3":
-        #     return "unknown"
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
+        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
+        # (...)
 
         if "local_fs" in source:
             encryption_scheme = self.is_encrypted_with(fp)
+            file_type = os.popen("htsfile " + fp)
 
         # Samtools' hstfile does not (yet) support (detailed?) htsget file identification ¯\_(ツ)_/¯
         #
@@ -94,14 +95,14 @@ class FileValidator(object):
         payload = None
         private_key = c.PRIVATE_KEY_CRYPT4GH
 
-        if "http" in fp:
+        if fp.startswith(("http://", "https://")):
             (extension, encrypted) = self.identify_file(fp, "htsget")
         else:
             (extension, encrypted) = self.identify_file(fp, "local_fs")
 
         if "unknown" not in extension:
             payload = self.load_binary(fp+extension)
-        elif encrypted is not None:
+        if encrypted is not None:
             if encrypted == c.ENCRYPTION_SCHEME_CRYPT4GH:
                 payload = self.decrypt_c4gh_binary(fp + c.EXTENSION_C4GH, private_key)
 

@@ -24,7 +24,6 @@ class TestCase(object):
     def validate_response_code(self, responses: list):
         for response in responses:
             if not (200 <= response.status_code <= 308):
-                # FIXME: expected response status needs to also accept "206: Partial content", not just "200: OK"
                 if self.get_expected_response_status() != response.status_code:
                     raise Exception("incorrect status code meow")
     

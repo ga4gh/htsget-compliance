@@ -37,8 +37,9 @@ class FileValidator(object):
 
         # TODO: This check shouldn't be here since htsfile is actually detecting files without extension?
         # need to read the .fileparts/* logic though and potentially move this function closer there...
-        if not "." in fp:
+        if "." not in fp:
             return "unknown"
+
         # FIXME: Also breaks with filenames such as spec-v4.3, i.e:
         # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
         # elif basename(fp) == "spec-v4.3":
@@ -90,20 +91,21 @@ class FileValidator(object):
     def load(self, fp) -> str:
         extension = None
         encrypted = None
-        samtools_string = None
+        payload = None
+        private_key = c.PRIVATE_KEY_CRYPT4GH
 
         if "http" in fp:
             (extension, encrypted) = self.identify_file(fp, "htsget")
         else:
             (extension, encrypted) = self.identify_file(fp, "local_fs")
 
-        if not "unknown" in extension:
-            samtools_string = self.load_binary(fp+extension)
+        if "unknown" not in extension:
+            payload = self.load_binary(fp+extension)
         elif encrypted is not None:
-            if encryption_scheme == c.ENCRYPTION_SCHEME_CRYPT4GH:
-                plaintext = self.decrypt_c4gh_binary(fp + c.EXTENSION_C4GH, private_key)
+            if encrypted == c.ENCRYPTION_SCHEME_CRYPT4GH:
+                payload = self.decrypt_c4gh_binary(fp + c.EXTENSION_C4GH, private_key)
 
-        return samtools_string
+        return payload
 
     def decrypt_c4gh_binary(self, fp, private_key) -> str:
         return os.popen("crypt4gh decrypt --sk " + private_key + " < " + fp).readlines()

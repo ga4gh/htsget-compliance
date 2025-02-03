@@ -70,4 +70,4 @@ class FilepartAggregator(object):
         self.output_filepath = fp
     
     def get_output_filepath(self):
-        return self.output_filepath
+        return os.path.abspath(self.output_filepath)

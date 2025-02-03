@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """A single test run against an htsget server"""
 
-import json
-import requests
 from ga4gh.htsget.compliance.config import constants as c
 from ga4gh.htsget.compliance.config import methods
 from ga4gh.htsget.compliance.schema_validator import SchemaValidator
@@ -22,14 +20,13 @@ class TestCase(object):
         self.set_expected_response_status(props["expected_response_status"])
         self.set_expected_contents(props["expected_contents"])
         self.set_kwargs(kwargs)
-    
-    def validate_response_code(self, responses):
-        pass
-        # for response in responses:
-        #     if not (200 <= response.status_code <= 308):
-        #         # FIXME: expected response status needs to also accept "206: Partial content", not just "200: OK"
-        #         #if self.get_expected_response_status() != response.status_code:
-        #             raise Exception("incorrect status code meow")
+
+    def validate_response_code(self, responses: list):
+        for response in responses:
+            if not (200 <= response.status_code <= 308):
+                # FIXME: expected response status needs to also accept "206: Partial content", not just "200: OK"
+                if self.get_expected_response_status() != response.status_code:
+                    raise Exception("incorrect status code meow")
     
     def validate_response_schema(self, response):
         response_json = response.json()

@@ -24,7 +24,10 @@ def format_reads_url(test_case, kwargs):
 def format_variants_url(test_case, kwargs):
     return format_url(test_case, kwargs, use_reads=False)
 
-def get_urls_concatenate_output(url: str, params) -> (bytes, list):
+def handle_data_urls():
+    pass
+
+def fetch_url(url, params={}) -> (bytes, list):
     ''' Fetches and concatenates the payload htsget "urls" array with
         multiple urls where some of those urls contain base64-encoded
         data.
@@ -32,28 +35,24 @@ def get_urls_concatenate_output(url: str, params) -> (bytes, list):
         returns: Tuple with concatenated payload and a list of all responses from all URLs,
                  including embedded data:;<base64> urls.
     '''
-    # Toplevel htsget endpoint query, does not need headers for ranges
-    try:
-        response = requests.get(url, params=params)
-    except:
-        raise Exception("Perhaps more data:; stuff?")
-    data = response.json()
-
-    urls = data.get("htsget", {}).get("urls", [])
     concatenated_data = b""
     all_responses = []
 
-    # First response will be the "top level" htsget request itself
-    all_responses.append(response)
+    # Determine whether we have been given a "top-level htsget url" or something else
+    urls = url.get("htsget", {}).get("urls", [])
+    if not urls:
+        urls = url
 
     for entry in urls:
         url = entry.get("url")
         if url.startswith(("http://", "https://")):
             headers = entry.get("headers", {})
-            response = requests.get(url, headers=headers, params=params)
-            # if not (200 <= response.status_code <= 308):
-            #     raise Exception(f"Failed to fetch {url}: {response.status_code}")
-            concatenated_data += response.content
+            response = requests.get(url, headers=headers, params=params, stream=True)
+            with response as stream:
+                for chunk in stream.iter_content(chunk_size=65536):
+                    if chunk:
+                        concatenated_data += chunk
+
             all_responses.append(response)
         elif url.startswith("data:;base64,"):
             base64_data = url.split("data:;base64,")[-1]

@@ -39,12 +39,10 @@ class TestCase(object):
             raise Exception(validation_result["message"])
     
     def validate_file_contents(self, response, params=None):
-        # TODO: Kill file_aggregator altogether
-        #
-        # aggregator = FilepartAggregator(response)
-        # aggregator.aggregate(params)
-        # returned_filepath = aggregator.get_output_filepath()
-        # expected_filepath = self.get_expected_contents()
+        aggregator = FilepartAggregator(response)
+        aggregator.aggregate(params)
+        returned_filepath = aggregator.get_output_filepath()
+        expected_filepath = self.get_expected_contents()
         file_validator = FileValidator(returned_filepath, expected_filepath)
         validation_result = file_validator.validate()
         if validation_result == FileValidator.FAILURE:
@@ -61,15 +59,15 @@ class TestCase(object):
             report_case.add_debug_msg("URL: " + url)
             report_case.add_debug_msg("PARAMS: " + str(params))
             # Handle multiple urls and "data:" url types, iterates through all urls returned by htsget
-            payload, responses = methods.get_urls_concatenate_output(url, params)
+            payload, responses = methods.fetch_url(url, params)
             # First request to the "top-level" htsget endpoint, not the individual urls in the response
             htsget_response = responses[0]
             # Check whether there's an error code in any of the responses for each url queried above
             self.validate_response_code(responses)
             # Validate the htsget response schema, not the payload of the individual URLs
             self.validate_response_schema(htsget_response)
-            # FIXME: Consolidate fileparts logic with methods.get_urls_concatenate_output() since it aggregates as well, anyway
-            #self.validate_file_contents(htsget_response, params=params)
+            # FIXME: Consolidate fileparts logic with methods.fetch_url() since it aggregates as well, anyway
+            self.validate_file_contents(htsget_response, params=params)
             report_case.set_status_success()
 
         except Exception as e:

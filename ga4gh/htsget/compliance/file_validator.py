@@ -1,8 +1,8 @@
 import os
-import requests
+import tempfile
+
 from ga4gh.htsget.compliance.config import constants as c
 from ga4gh.htsget.compliance.config import methods
-import tempfile
 
 class FileValidator(object):
 
@@ -52,7 +52,7 @@ class FileValidator(object):
         # % htsfile https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878
         # https://htsget.ga4gh-demo.org/reads/htsnexus_test_NA12878:      htsget text
         elif "htsget" in source:
-            file_payload, responses = methods.get_urls_concatenate_output(fp).json()
+            file_payload, responses = methods.fetch_url(fp).json()
             file_type = responses[0]["htsget"]["format"] # First response code is from htsget endpoint itself
 
             with tempfile.NamedTemporaryFile(delete=True) as temp_file:
@@ -101,12 +101,12 @@ class FileValidator(object):
             samtools_string = self.load_binary(fp+extension)
         elif encrypted is not None:
             if encryption_scheme == c.ENCRYPTION_SCHEME_CRYPT4GH:
-                cleartext_string = self.decrypt_c4gh_binary(fp, private_key)
+                plaintext = self.decrypt_c4gh_binary(fp + c.EXTENSION_C4GH, private_key)
 
         return samtools_string
 
-    def decrypt_c4gh_binary(self, fp) -> str:
-        pass
+    def decrypt_c4gh_binary(self, fp, private_key) -> str:
+        return os.popen("crypt4gh decrypt --sk " + private_key + " < " + fp).readlines()
 
     def load_binary(self, fp) -> str:
         s = []

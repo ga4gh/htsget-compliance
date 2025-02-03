@@ -62,7 +62,7 @@ class TestCase(object):
             self.validate_response_code(responses)
             # Validate the htsget response schema, not the payload of the individual URLs
             self.validate_response_schema(htsget_response)
-            # FIXME: Consolidate fileparts logic with methods.fetch_url() since it aggregates as well, anyway
+            # Check against samtools (and crypt4gh) with local files fetched on the filesystem
             self.validate_file_contents(htsget_response, params=params)
             report_case.set_status_success()
 

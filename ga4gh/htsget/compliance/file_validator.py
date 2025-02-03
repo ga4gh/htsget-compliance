@@ -57,6 +57,7 @@ class FileValidator(object):
             file_payload, responses = methods.fetch_url(fp).json()
             file_type = responses[0]["htsget"]["format"] # First response code is from htsget endpoint itself
 
+            # htsfile needs a file
             with tempfile.NamedTemporaryFile(delete=True) as temp_file:
                 temp_file.write(file_payload.encode())
                 temp_file.flush()
@@ -74,6 +75,11 @@ class FileValidator(object):
             ext = c.EXTENSION_BCF
         else:
             ext = ".unknown_file_format"
+
+        # Append encryption file extension to file type if encrypted
+        if encryption_scheme is not None:
+            if encryption_scheme == c.ENCRYPTION_SCHEME_CRYPT4GH:
+                ext = ext + c.EXTENSION_C4GH
         
         return (ext, encryption_scheme)
 
@@ -85,6 +91,10 @@ class FileValidator(object):
         string_expected = self.load(self.get_expected_fp())
 
         if string_returned != string_expected:
+            result = FileValidator.FAILURE
+        if string_expected is None:
+            result = FileValidator.FAILURE
+        if string_returned is None:
             result = FileValidator.FAILURE
         
         return result

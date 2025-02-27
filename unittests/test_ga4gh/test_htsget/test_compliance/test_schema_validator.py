@@ -14,7 +14,7 @@ Attributes:
     INSTANCE_FAILURES (list): all invalid responses
 """
 
-from ga4gh.htsget.compliance.schema_validator import SchemaValidator
+from testbed.htsget.compliance.schema_validator import SchemaValidator
 
 INSTANCE_SUCCESS_0 = {
     "htsget": {

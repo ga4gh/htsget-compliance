@@ -3,11 +3,11 @@
 
 import json
 import requests
-from ga4gh.htsget.compliance.config import constants as c
-from ga4gh.htsget.compliance.schema_validator import SchemaValidator
-from ga4gh.htsget.compliance.file_validator import FileValidator
-from ga4gh.htsget.compliance.filepart_aggregator import FilepartAggregator
-from ga4gh.testbed.models.report_case import ReportCase
+from testbed.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.schema_validator import SchemaValidator
+from testbed.htsget.compliance.file_validator import FileValidator
+from testbed.htsget.compliance.filepart_aggregator import FilepartAggregator
+from ga4gh.testbed.report.case import Case
 
 class TestCase(object):
 
@@ -45,7 +45,7 @@ class TestCase(object):
     
     def execute_test(self):
         
-        report_case = ReportCase()
+        report_case = Case()
         report_case.set_name(self.get_name())
 
         try:

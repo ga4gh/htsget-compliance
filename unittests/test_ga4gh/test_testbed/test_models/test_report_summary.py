@@ -6,7 +6,7 @@ Attributes:
     counts (dict): sample status counts for multiple report summary objects
 """
 
-from ga4gh.testbed.models.report_summary import ReportSummary
+from testbed.testbed.models.report_summary import ReportSummary
 from ga4gh.testbed import constants as c
 
 status_ints = {

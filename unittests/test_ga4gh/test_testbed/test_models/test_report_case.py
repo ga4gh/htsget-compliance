@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Unit Tests for ga4gh.testbed.models.report_case module"""
 
-from ga4gh.testbed.models.report_case import ReportCase
+from testbed.testbed.models.report_case import ReportCase
 from ga4gh.testbed import constants as c
 
 data = [

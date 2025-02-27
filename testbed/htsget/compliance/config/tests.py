@@ -9,9 +9,9 @@ Attributes:
 
 import inspect
 import os
-from ga4gh.htsget.compliance.config import constants as c
-from ga4gh.htsget.compliance.config import methods as m
-from ga4gh.htsget.compliance.config import test_case_property_matrix as tcpm
+from testbed.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.config import methods as m
+from testbed.htsget.compliance.config import test_case_property_matrix as tcpm
 
 TEST_GROUPS = {
     "reads": {

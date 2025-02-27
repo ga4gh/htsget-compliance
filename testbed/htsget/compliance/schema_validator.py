@@ -7,7 +7,7 @@ import os
 from jsonschema import validate
 from jsonschema import RefResolver
 from jsonschema.exceptions import ValidationError
-from ga4gh.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.config import constants as c
 
 class SchemaValidator(object):
     """Validates htsget response matches JSON schema

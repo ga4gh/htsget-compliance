@@ -63,7 +63,7 @@ setuptools.setup(
     install_requires=install_requires,
     entry_points='''
         [console_scripts]
-        htsget-compliance=ga4gh.htsget.compliance.entrypoint:main
+        htsget-compliance=testbed.htsget.compliance.entrypoint:main
     ''',
     classifiers=(
         "Programming Language :: Python :: 3.6",

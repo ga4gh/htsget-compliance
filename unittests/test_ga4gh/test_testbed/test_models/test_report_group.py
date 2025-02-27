@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Unit Tests for ga4gh.testbed.models.report_group module"""
 
-from ga4gh.testbed.models.report_group import ReportGroup
-from ga4gh.testbed.models.report_case import ReportCase
+from testbed.testbed.models.report_group import ReportGroup
+from testbed.testbed.models.report_case import ReportCase
 from ga4gh.testbed import constants as c
 
 all_group_info = [

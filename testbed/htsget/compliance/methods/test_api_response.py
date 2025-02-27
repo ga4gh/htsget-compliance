@@ -8,9 +8,10 @@ matches expected, that JSON response matches the htsgetResponse JSON schema.
 
 import json
 import requests
-from ga4gh.htsget.compliance.config import constants as c
-from ga4gh.htsget.compliance.schema_validator import SchemaValidator
-from ga4gh.testbed.models.report_case import ReportCase
+from testbed.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.schema_validator import SchemaValidator
+#from testbed.models.report_case import ReportCase
+from ga4gh.testbed.report.case import Case
 
 def test_api_response(test_case, kwargs):
     """Makes api request and tests response for compliance
@@ -25,7 +26,7 @@ def test_api_response(test_case, kwargs):
     """
 
     # instantiate ReportCase
-    report_case = ReportCase()
+    report_case = Case()
     report_case.set_name(test_case["name"])
     
     try:

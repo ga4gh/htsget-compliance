@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """static methods"""
 
-from ga4gh.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.config import constants as c
 
 def format_url(test_case, kwargs, use_reads=True):
 

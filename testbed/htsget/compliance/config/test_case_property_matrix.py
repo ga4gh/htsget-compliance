@@ -1,6 +1,6 @@
 import os
-from ga4gh.htsget.compliance.config import constants as c
-from ga4gh.htsget.compliance.config import methods as m
+from testbed.htsget.compliance.config import constants as c
+from testbed.htsget.compliance.config import methods as m
 
 def construct_reads_test_cases_matrix():
 

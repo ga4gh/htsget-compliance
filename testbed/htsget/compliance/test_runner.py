@@ -1,11 +1,11 @@
 import datetime
 
-from testbed.htsget.compliance.tests import initiate_tests
+from testbed.htsget.compliance.test import initiate_tests
 from testbed.htsget.compliance.utils import now
 import re
 import sys
-from testbed.htsget.compliance.tests import *
-from testbed.htsget.compliance.tests import tests_in_phase
+from testbed.htsget.compliance.test import *
+from testbed.htsget.compliance.test import tests_in_phase
 from ga4gh.testbed.report.report import Report
 
 
@@ -58,14 +58,14 @@ class TestRunner():
         self.end_time = {}
         self.phase_start_time = {}
         self.phase_end_time = {}
-        self.hls_to_phase={'test_info_implement': 'service info', 
-                      'test_metadata_implement': 'metadata', 
-                      'test_sequence_implement': 'sequence', 
-                      'test_sequence_range': 'sequence range'}
-        self.parent_short_name={'test_info_implement': 'test_info', 
-                      'test_metadata_implement': 'test_metadata', 
-                      'test_sequence_implement': 'test_sequence', 
-                      'test_sequence_range': 'test_sequence_range'}
+        self.hls_to_phase={'phase1': 'service info', 
+                      'phase2': 'metadata', 
+                      'phase3': 'sequence', 
+                      'phase4': 'sequence range'}
+        self.parent_short_name={'phase1': 'test_info', 
+                      'phase2': 'test_metadata', 
+                      'phase3': 'test_sequence', 
+                      'phase4': 'test_sequence_range'}
 
     def recurse_label_tests(self, root):
         '''
@@ -180,16 +180,20 @@ class TestRunner():
         #for key, value in sequence_start_times.items():
         #    print(key, value)
 
-        self.report.set_testbed_name("refget-compliance-suite")
+        self.report.set_testbed_name("htsget-compliance-suite")
         self.report.add_input_parameter('server', self.base_url)
 
-        for high_level_name in ('test_info_implement', 'test_metadata_implement', 'test_sequence_implement', 'test_sequence_range'):
+        for high_level_name in ('phase1', 'phase2', 'phase3', 'phase4'):
 
             #Create Report Phases
             phase = self.report.add_phase()
             phase.set_phase_name(self.hls_to_phase[high_level_name])
-            phase.set_start_time(self.phase_start_time[high_level_name])
-            phase.set_end_time(self.phase_end_time[high_level_name])
+
+            #TODO fix time settings
+            #phase.set_start_time(self.phase_start_time[high_level_name])
+            #phase.set_end_time(self.phase_end_time[high_level_name])
+            phase.set_start_time(now)
+            phase.set_end_time(now)
 
             #Create tests for phase
             for test in self.results:

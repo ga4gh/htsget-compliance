@@ -76,7 +76,7 @@ def main(**kwargs):
     # # summarize the Report
     # report.finalize()
 
-    tr = TestRunner(kwargs["htsget-url"])
+    tr = TestRunner(kwargs["htsget_url"])
     tr.run_tests()
 
     ga4gh_report = tr.generate_report()

@@ -1,6 +1,7 @@
 import requests
 import sys
 from testbed.htsget.compliance.utils import now
+from testbed.htsget.compliance.config.tests import TEST_GROUPS
 
 case_start_time = {}
 case_end_time = {}
@@ -130,7 +131,7 @@ def get_test_end_times():
     return case_end_time
 
 
-tests_in_phase = {'phase1': [], 'phase2': [], 'phase3': [], 'phase4': []}
+tests_in_phase = {'reads': TEST_GROUPS["reads"]["cases"], 'variants': TEST_GROUPS["variants"]["cases"]}
 
 def initiate_tests():
     '''
@@ -141,9 +142,50 @@ def initiate_tests():
         if True is True:
             test.result = 1
 
+    for phase in tests_in_phase:
+        print(tests_in_phase[phase])        
+        #test_reads = Test()
+        #test_reads = 
+
+
+
+    # reads_test_cases = construct_reads_test_cases_matrix()
+
     test_base = Test(base_algorithm)
 
-    return test_base
+    # File Validator Test Cases
+    # test_reads = Test()
+
+    # test_info_implement = Test(info_implement)
+    # test_info_implement.set_phase('service info')
+    # test_info_implement.set_pass_text('Info endpoint implemented by the server')
+    # test_info_implement.set_fail_text('Info endpoint not implemented by the server')
+
+    # test_info_implement = Test(info_implement)
+    # test_info_implement.set_phase('service info')
+    # test_info_implement.set_pass_text('Info endpoint implemented by the server')
+    # test_info_implement.set_fail_text('Info endpoint not implemented by the server')
+
+    # test_info_implement = Test(info_implement)
+    # test_info_implement.set_phase('service info')
+    # test_info_implement.set_pass_text('Info endpoint implemented by the server')
+    # test_info_implement.set_fail_text('Info endpoint not implemented by the server')
+
+    # tests_in_phase['service info'] = ['test_info_implement',
+    #                                   'test_info_implement_default']
+
+    # for endpoint in c.ENDPOINTS:
+    #     group = ReportGroup()
+    #     group.set_name(endpoint)
+    #     cases = TEST_GROUPS[endpoint]["cases"]
+    #     for case_props in cases:
+    #         test_case_obj = TestCase(case_props, kwargs)
+    #         report_case = test_case_obj.execute_test()
+    #         group.add_case(report_case)
+    #     group.summarize()
+    #     report.add_group(group)
+
+    #return test_base
 
 
 

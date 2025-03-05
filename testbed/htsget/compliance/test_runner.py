@@ -7,6 +7,7 @@ import sys
 from testbed.htsget.compliance.test import *
 from testbed.htsget.compliance.test import tests_in_phase
 from ga4gh.testbed.report.report import Report
+from testbed.htsget.compliance.config import constants as c
 
 
 def processed_func_descrp(text):
@@ -37,7 +38,7 @@ class TestRunner():
 
         self.root = None
         self.session_params = {
-            'refget_version': 1,
+            'htsget_version': 1,
             'limit': None,
             'algorithms:trunc512': None,
             'algorithms::ga4gh': None,
@@ -58,14 +59,10 @@ class TestRunner():
         self.end_time = {}
         self.phase_start_time = {}
         self.phase_end_time = {}
-        self.hls_to_phase={'phase1': 'service info', 
-                      'phase2': 'metadata', 
-                      'phase3': 'sequence', 
-                      'phase4': 'sequence range'}
-        self.parent_short_name={'phase1': 'test_info', 
-                      'phase2': 'test_metadata', 
-                      'phase3': 'test_sequence', 
-                      'phase4': 'test_sequence_range'}
+        self.hls_to_phase={'phase1': 'reads', 
+                      'phase2': 'variants'}
+        self.parent_short_name={'phase1': 'reads', 
+                      'phase2': 'variants'}
 
     def recurse_label_tests(self, root):
         '''
@@ -183,7 +180,7 @@ class TestRunner():
         self.report.set_testbed_name("htsget-compliance-suite")
         self.report.add_input_parameter('server', self.base_url)
 
-        for high_level_name in ('phase1', 'phase2', 'phase3', 'phase4'):
+        for high_level_name in ('reads', 'variants'):
 
             #Create Report Phases
             phase = self.report.add_phase()

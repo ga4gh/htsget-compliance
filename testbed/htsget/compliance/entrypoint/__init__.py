@@ -25,7 +25,7 @@ from testbed.htsget.compliance.methods.test_api_response import test_api_respons
 from testbed.htsget.compliance.test_case import TestCase
 from ga4gh.testbed.report.report import Report
 from ga4gh.testbed.submit.report_submitter import ReportSubmitter
-
+from ga4gh.testbed.report.phase import Phase
 from testbed.htsget.compliance.test_runner import TestRunner
 
 @click.command()

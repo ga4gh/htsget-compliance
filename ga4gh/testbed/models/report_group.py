@@ -19,6 +19,8 @@ class ReportGroup(object):
         self.name = None
         self.summary = None
         self.cases = []
+        self.start_time = None
+        self.end_time = None
 
     def add_case(self, case_obj):
         """add a ReportCase to the group
@@ -46,6 +48,12 @@ class ReportGroup(object):
         """
 
         return self.name
+
+    def set_start_time(self, start_time):
+        self.start_time = start_time
+
+    def set_end_time(self, end_time):    
+        self.end_time = end_time
     
     def summarize(self):
         """Summarize completed test report cases for the entire group
@@ -85,7 +93,11 @@ class ReportGroup(object):
         """
 
         return {
-            "name": self.name,
+            "phase_name": self.name,
+            "phase_description": "",
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "status": "FAIL",
             "summary": self.summary.as_json(),
-            "cases": [case.as_json() for case in self.cases]
+            "tests": [case.as_json() for case in self.cases]
         }

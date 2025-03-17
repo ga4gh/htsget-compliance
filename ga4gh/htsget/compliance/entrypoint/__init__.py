@@ -57,11 +57,14 @@ def main(**kwargs):
     for endpoint in c.ENDPOINTS:
         group = ReportGroup()
         group.set_name(endpoint)
+        group.set_start_time(str(datetime.datetime.now().isoformat()))
         cases = TEST_GROUPS[endpoint]["cases"]
         for case_props in cases:
             test_case_obj = TestCase(case_props, kwargs)
             report_case = test_case_obj.execute_test()
             group.add_case(report_case)
+
+        group.set_end_time(str(datetime.datetime.now().isoformat()))
         group.summarize()
         report.add_group(group)
     

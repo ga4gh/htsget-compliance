@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """A single test run against an htsget server"""
 
+import datetime
 import json
 import requests
 from ga4gh.htsget.compliance.config import constants as c
@@ -47,7 +48,7 @@ class TestCase(object):
         
         report_case = ReportCase()
         report_case.set_name(self.get_name())
-
+        report_case.set_start_time(str(datetime.datetime.now().isoformat()))
         try:
             url = self.get_formatted_url()
             params = self.get_url_params()
@@ -64,6 +65,8 @@ class TestCase(object):
             report_case.set_status_failure()
             report_case.set_error(str(e))
         
+        report_case.set_end_time(str(datetime.datetime.now().isoformat()))
+
         return report_case
     
     def set_name(self, name):

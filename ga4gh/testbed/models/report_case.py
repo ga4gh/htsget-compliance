@@ -24,6 +24,8 @@ class ReportCase(object):
         self.info = []
         self.warn = []
         self.error = None
+        self.start_time = None
+        self.end_time = None
     
     def set_name(self, name):
         """set name
@@ -144,6 +146,12 @@ class ReportCase(object):
 
         return self.error
 
+    def set_start_time(self, start_time):
+        self.start_time = start_time
+
+    def set_end_time(self, end_time):    
+        self.end_time = end_time
+
     def as_json(self):
         """Dump ReportCase object as simple python dictionary
 
@@ -156,10 +164,22 @@ class ReportCase(object):
         """
 
         return {
-            "name": self.name,
+            "test_name": self.name,
+            "test_description": "Test to check if info-endpoint returns 200 OK with appropriate headers",
+            "start_time": self.start_time,
+            "end_time": self.end_time,
             "status": self.get_status(),
-            "debug": self.get_debug(),
-            "info": self.get_info(),
-            "warn": self.get_warn(),
-            "error": self.get_error()
+            "summary": {},
+            "message": "",
+            "cases": [
+                {
+                    "case_name": self.name,
+                    "case_description": "Test to check if info-endpoint returns 200 OK with appropriate headers",
+                    "log_messages": [],
+                    "start_time": self.start_time,
+                    "end_time": self.end_time,
+                    "status": self.get_status(),
+                    "message": ""
+                }
+            ]
         }

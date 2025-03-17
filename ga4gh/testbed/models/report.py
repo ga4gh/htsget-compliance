@@ -21,7 +21,8 @@ class Report(object):
         self.id = None
         self.configuration_id = None
         self.parameters = {}
-        self.generated_at = None
+        self.start_time = str(datetime.datetime.now().isoformat())
+        self.end_time = None
         self.summary = None
         self.groups = []
 
@@ -108,7 +109,7 @@ class Report(object):
         the final summary of all ReportGroups.
         """
 
-        self.generated_at = str(datetime.datetime.now().isoformat())
+        self.end_time = str(datetime.datetime.now().isoformat())
         self.summarize()
 
     def as_json(self):
@@ -118,13 +119,37 @@ class Report(object):
             dict: Report object as python dictionary
         """
 
+        # return {
+        #     "id": self.get_id(),
+        #     "configurationId": self.get_configuration_id(),
+        #     "parameters": self.get_parameters(),
+        #     "generatedAt": self.generated_at,
+        #     "summary": self.summary.as_json(),
+        #     "groups": [group.as_json() for group in self.groups]
+        # }
+
         return {
-            "id": self.get_id(),
-            "configurationId": self.get_configuration_id(),
+            "schema_name": "ga4gh-testbed-report",
+            "schema_version": "0.1.0",
+            "testbed_name": "Htsget-compliance-suite",
+            "testbed_version": "",
+            "testbed_description": "",
+            "platform_name": "",
+            "platform_description": "",
             "parameters": self.get_parameters(),
-            "generatedAt": self.generated_at,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "status": "",
             "summary": self.summary.as_json(),
-            "groups": [group.as_json() for group in self.groups]
+            "phases": [group.as_json() for group in self.groups],
+            "testbed": {
+                "id": "htsget-compliance",
+                "testbed_name": "Htsget Compliance Suite",
+                "testbed_description": "Test compliance of Htsget services to specification",
+                "repo_url": "https://github.com/ga4gh/htsget-compliance",
+                "dockerhub_url": "",
+                "dockstore_url": ""
+            }
         }
     
     def __str__(self):

@@ -3,6 +3,8 @@ import shutil
 
 from ga4gh.htsget.compliance.config import constants as c
 from ga4gh.htsget.compliance.config import methods
+from ga4gh.htsget.compliance.config.methods import fetch_inline_data
+
 
 class FilepartAggregator(object):
     
@@ -22,16 +24,25 @@ class FilepartAggregator(object):
             headers = url_obj["headers"] \
                       if "headers" in url_obj.keys() \
                       else None
-            
-            self.download_filepart(url, headers=headers, params=params, idx=i)
+
+            if url.startswith("data:;base64,"):
+                data, _ = fetch_inline_data(url)
+                self.write_filepart(data, i)
+            else:
+                self.download_filepart(url, headers=headers, idx=i)
             i += 1
         
         self.aggregate_fileparts()
 
-    def download_filepart(self, url, headers=None, params=None, idx=0):
+    def download_filepart(self, url, headers=None, idx=0):
+        _, response = methods.fetch_url(url, headers=headers)
+        payload = response[0].content
+
+        self.write_filepart(payload, idx)
+
+    def write_filepart(self, payload, idx=0):
         filepath = self.get_filepart_path(idx)
         with open(filepath, 'wb') as f:
-            payload, _ = methods.fetch_url(url)
             f.write(payload)
     
     def aggregate_fileparts(self):

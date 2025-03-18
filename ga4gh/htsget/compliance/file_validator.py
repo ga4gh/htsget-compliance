@@ -1,4 +1,5 @@
 import os
+import subprocess
 import tempfile
 
 from ga4gh.htsget.compliance.config import constants as c
@@ -9,15 +10,16 @@ class FileValidator(object):
     SUCCESS = 1
     FAILURE = -1
 
-    def __init__(self, returned_fp, expected_fp):
+    def __init__(self, returned_fp, expected_fp, expected_key):
         self.set_returned_fp(returned_fp)
         self.set_expected_fp(expected_fp)
+        self.expected_key = expected_key
 
     def is_encrypted_with(self, fp) -> str:
         ''' Identifies encryption scheme
         '''
         encryption_scheme = None
-        encryption_scheme = os.popen("htsfile " + fp)
+        encryption_scheme = subprocess.check_output(["htsfile", fp]).decode("utf-8")
         if "crypt4gh data" in encryption_scheme:
             encryption_scheme = c.ENCRYPTION_SCHEME_CRYPT4GH
         # Must be last statement if no scheme is found above
@@ -35,19 +37,9 @@ class FileValidator(object):
         file_type = None
         encryption_scheme = None
 
-        # FIXME:
-        # (...)
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/reads/htsnexus_test_NA12878": No such file or directory
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
-        # htsfile: can't open "/Users/rvalls/dev/umccr/htsget-compliance/ga4gh/htsget/data/variants/spec-v4.3": No such file or directory
-        # (...)
-
         if "local_fs" in source:
             encryption_scheme = self.is_encrypted_with(fp)
-            file_type = os.popen("htsfile " + fp)
+            file_type = subprocess.check_output(["htsfile", fp]).decode("utf-8")
 
         # Samtools' hstfile does not (yet) support (detailed?) htsget file identification ¯\_(ツ)_/¯
         #
@@ -77,9 +69,9 @@ class FileValidator(object):
             ext = ".unknown_file_format"
 
         # Append encryption file extension to file type if encrypted
-        if encryption_scheme is not None:
-            if encryption_scheme == c.ENCRYPTION_SCHEME_CRYPT4GH:
-                ext = ext + c.EXTENSION_C4GH
+        # if encryption_scheme is not None:
+        #     if encryption_scheme == c.ENCRYPTION_SCHEME_CRYPT4GH:
+        #         ext = ext + c.EXTENSION_C4GH
         
         return (ext, encryption_scheme)
 
@@ -87,8 +79,8 @@ class FileValidator(object):
 
         result = FileValidator.SUCCESS
 
-        string_returned = self.load(self.get_returned_fp())
-        string_expected = self.load(self.get_expected_fp())
+        string_returned = self.load(self.get_returned_fp()).decode("utf-8")
+        string_expected = self.load(self.get_expected_fp()).decode("utf-8")
 
         if string_returned != string_expected:
             result = FileValidator.FAILURE
@@ -99,11 +91,11 @@ class FileValidator(object):
         
         return result
 
-    def load(self, fp) -> str:
+    def load(self, fp) -> bytes:
         extension = None
         encrypted = None
         payload = None
-        private_key = c.PRIVATE_KEY_CRYPT4GH
+        private_key = self.expected_key
 
         if fp.startswith(("http://", "https://")):
             (extension, encrypted) = self.identify_file(fp, "htsget")
@@ -111,28 +103,39 @@ class FileValidator(object):
             (extension, encrypted) = self.identify_file(fp, "local_fs")
 
         if "unknown" not in extension:
-            payload = self.load_binary(fp+extension)
+            payload = self.load_binary(fp).encode("utf-8")
         if encrypted is not None:
             if encrypted == c.ENCRYPTION_SCHEME_CRYPT4GH:
-                payload = self.decrypt_c4gh_binary(fp + c.EXTENSION_C4GH, private_key)
+                payload = self.decrypt_c4gh_binary(fp, private_key)
+                with open(fp, "wb") as f:
+                    f.write(payload)
+
+                payload = self.load_binary(fp).encode("utf-8")
 
         return payload
 
-    def decrypt_c4gh_binary(self, fp, private_key) -> str:
-        return os.popen("crypt4gh decrypt --sk " + private_key + " < " + fp).readlines()
+    def decrypt_c4gh_binary(self, fp, private_key) -> bytes:
+        with open(fp, "rb") as f:
+            data = subprocess.check_output(["crypt4gh", "decrypt", "--sk", private_key], stdin=f)
+            return data
 
     def load_binary(self, fp) -> str:
         s = []
-        viewer_ouput = ""
+        viewer_output = ""
 
         if "bcf" in fp:
-            viewer_ouput = os.popen("bcftools view " + fp).readlines()
+            viewer_output = os.popen("bcftools view " + fp).readlines()
         else:
             viewer_output = os.popen("samtools view " + fp).readlines()
 
         for line in viewer_output:
+            # Skip the view command as it encodes the file path which is allowed to be different.
+            if "bcftools_viewCommand" in line:
+                continue
+
             ls = line.rstrip().split("\t")
             s.append("\t".join(ls[:11])) # TODO: Probably a hashed output would be more reliable, efficient and no so dependant on samtools?
+
         return "\n".join(s) + "\n"
 
     def set_returned_fp(self, returned_fp):

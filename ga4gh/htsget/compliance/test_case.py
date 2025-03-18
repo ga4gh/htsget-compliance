@@ -19,6 +19,7 @@ class TestCase(object):
         self.set_obj_id(props["obj_id"])
         self.set_expected_response_status(props["expected_response_status"])
         self.set_expected_contents(props["expected_contents"])
+        self.expected_key = props["expected_key"]
         self.set_kwargs(kwargs)
 
     def validate_response_code(self, responses: list):
@@ -39,7 +40,7 @@ class TestCase(object):
         aggregator.aggregate(params)
         returned_filepath = aggregator.get_output_filepath()
         expected_filepath = self.get_expected_contents()
-        file_validator = FileValidator(returned_filepath, expected_filepath)
+        file_validator = FileValidator(returned_filepath, expected_filepath, self.expected_key)
         validation_result = file_validator.validate()
         if validation_result == FileValidator.FAILURE:
             raise Exception("returned file does not match expected")

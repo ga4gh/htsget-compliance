@@ -23,13 +23,21 @@ apt-get install samtools uv  (OSX: brew install samtools uv)
 uv venv .
 pip install crypt4gh
 ```
-To install `htsget-compliance`, clone the Github repository, then install via setuptools:
+To install `htsget-compliance`, clone the Github repository, then install via setuptools in a new virtual environment.
 
-```
-source .venv/bin/activate
+Create a new virtual environment:
+
+```sh
 git clone https://github.com/ga4gh/htsget-compliance.git
 cd htsget-compliance
-python setup.py install
+
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install the package:
+```sh
+pip install -e .
 ```
 
 ## Quickstart
@@ -37,7 +45,7 @@ python setup.py install
 Running the following:
 
 ```shell
-% htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
+htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
 ```
 
 Should ideally yield:

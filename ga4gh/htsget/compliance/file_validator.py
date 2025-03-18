@@ -105,10 +105,10 @@ class FileValidator(object):
         payload = None
         private_key = c.PRIVATE_KEY_CRYPT4GH
 
-        if fp.startswith(("http://", "https://")):
-            (extension, encrypted) = self.identify_file(fp, "htsget")
-        else:
-            (extension, encrypted) = self.identify_file(fp, "local_fs")
+        # if fp.startswith(("http://", "https://")):
+        #     (extension, encrypted) = self.identify_file(fp, "htsget")
+        # else:
+        (extension, encrypted) = self.identify_file(fp, "local_fs")
 
         if "unknown" not in extension:
             payload = self.load_binary(fp+extension)

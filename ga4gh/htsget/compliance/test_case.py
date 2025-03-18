@@ -34,7 +34,7 @@ class TestCase(object):
         if validation_result["status"] == SchemaValidator.FAILURE:
             raise Exception(validation_result["message"])
     
-    def validate_file_contents(self, response, params=None):
+    def validate_file_contents(self, response, payload, params=None):
         aggregator = FilepartAggregator(response)
         aggregator.aggregate(params)
         returned_filepath = aggregator.get_output_filepath()
@@ -63,7 +63,7 @@ class TestCase(object):
             # Validate the htsget response schema, not the payload of the individual URLs
             self.validate_response_schema(htsget_response)
             # Check against samtools (and crypt4gh) with local files fetched on the filesystem
-            self.validate_file_contents(htsget_response, params=params)
+            self.validate_file_contents(htsget_response, payload, params=params)
             report_case.set_status_success()
 
         except Exception as e:

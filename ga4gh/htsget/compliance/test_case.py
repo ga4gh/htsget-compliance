@@ -64,7 +64,8 @@ class TestCase(object):
             # any raised exceptions will set the ReportCase status to failure
             report_case.set_status_failure()
             report_case.set_error(str(e))
-        
+        report_case.add_case(report_case)
+        report_case.summarize()
         report_case.set_end_time(str(datetime.datetime.now().isoformat()))
 
         return report_case

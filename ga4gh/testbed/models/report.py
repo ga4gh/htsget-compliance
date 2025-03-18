@@ -4,6 +4,7 @@
 import datetime
 import json
 from ga4gh.testbed.models.report_summary import ReportSummary
+from ga4gh.testbed import constants as c
 
 class Report(object):
     """High level report containing multiple groups and cases
@@ -25,6 +26,7 @@ class Report(object):
         self.end_time = None
         self.summary = None
         self.groups = []
+        self.status = None
 
     def set_id(self, uniqid):
         """set id
@@ -87,9 +89,11 @@ class Report(object):
         list into a single ReportSummary. Sets this to the Report object's
         "summary" attribute
         """
-
+        self.status = c.RESULT_SUCCESS
         summary = ReportSummary()
         [summary.add_from_summary(group.summary) for group in self.groups]
+        if summary.get_failed() > 0:
+            self.status = c.RESULT_FAILURE
         self.summary = summary
 
     def add_group(self, group_obj):
@@ -139,7 +143,7 @@ class Report(object):
             "parameters": self.get_parameters(),
             "start_time": self.start_time,
             "end_time": self.end_time,
-            "status": "",
+            "status": self.status,
             "summary": self.summary.as_json(),
             "phases": [group.as_json() for group in self.groups],
             "testbed": {

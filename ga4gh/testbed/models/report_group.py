@@ -2,6 +2,7 @@
 """Testbed ReportGroup, reports on a semantically-grouped set of test cases"""
 
 import json
+from ga4gh.testbed import constants as c
 from ga4gh.testbed.models.report_summary import ReportSummary
 
 class ReportGroup(object):
@@ -21,6 +22,7 @@ class ReportGroup(object):
         self.cases = []
         self.start_time = None
         self.end_time = None
+        self.status = None
 
     def add_case(self, case_obj):
         """add a ReportCase to the group
@@ -77,8 +79,11 @@ class ReportGroup(object):
             """
             summary_obj.increment(case_obj.get_status())
 
+        self.status = c.RESULT_SUCCESS
         summary = ReportSummary()
         [increment_summary(summary, case) for case in self.cases]
+        if summary.get_failed() > 0:
+            self.status = c.RESULT_FAILURE
         self.summary = summary
 
     def as_json(self):
@@ -97,7 +102,7 @@ class ReportGroup(object):
             "phase_description": "",
             "start_time": self.start_time,
             "end_time": self.end_time,
-            "status": "FAIL",
+            "status": self.status,
             "summary": self.summary.as_json(),
             "tests": [case.as_json() for case in self.cases]
         }

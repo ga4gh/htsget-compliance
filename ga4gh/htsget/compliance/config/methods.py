@@ -35,9 +35,8 @@ def fetch_inline_data(url: str) -> (bytes, object):
     return (data, phony_response)
 
 
-def fetch_remote_url(url: str or dict, params=None) -> (bytes, object):
+def fetch_remote_url(url: str or dict, params=None, headers=None) -> (bytes, object):
     data = b""
-    headers = {}
 
     if isinstance(url, dict):
         headers = url.get("headers", {})
@@ -52,7 +51,7 @@ def fetch_remote_url(url: str or dict, params=None) -> (bytes, object):
     return (data, response)
 
 
-def fetch_url(url: str or dict, params={}) -> (bytes, list):
+def fetch_url(url: str or dict, params={}, headers=None) -> (bytes, list):
     ''' Fetches and concatenates the payload htsget "urls" array with
         multiple urls where some of those urls contain base64-encoded
         data.
@@ -72,14 +71,14 @@ def fetch_url(url: str or dict, params={}) -> (bytes, list):
     # Determine whether we have been given a "top-level htsget url" or something else
     if isinstance(url, str):
         # Data is the actual url so that next conditional can work on it as a dict
-        url, response = fetch_remote_url(url)
+        url, response = fetch_remote_url(url, params, headers)
         responses.append(response)
     if isinstance(url, dict):
         urls = url.get("htsget", {}).get("urls", [])
         for entry in urls:
             url = entry.get("url")
             if url.startswith(("http://", "https://")):
-                one_data, one_response = fetch_remote_url(url, params=params)
+                one_data, one_response = fetch_remote_url(url, params=params, headers=headers)
             elif url.startswith("data:;base64,"):
                 one_data, one_response = fetch_inline_data(url)
 

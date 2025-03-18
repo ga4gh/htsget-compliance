@@ -48,7 +48,7 @@ class TestCase(object):
         
         report_case = ReportCase()
         report_case.set_name(self.get_name())
-        report_case.set_start_time(str(datetime.datetime.now().isoformat()))
+        report_case.set_start_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
         try:
             url = self.get_formatted_url()
             params = self.get_url_params()
@@ -66,7 +66,7 @@ class TestCase(object):
             report_case.set_error(str(e))
         report_case.add_case(report_case)
         report_case.summarize()
-        report_case.set_end_time(str(datetime.datetime.now().isoformat()))
+        report_case.set_end_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
 
         return report_case
     

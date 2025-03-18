@@ -5,6 +5,7 @@ import datetime
 import json
 from ga4gh.testbed.models.report_summary import ReportSummary
 from ga4gh.testbed import constants as c
+from ga4gh.htsget.compliance.config import constants as cons
 
 class Report(object):
     """High level report containing multiple groups and cases
@@ -22,7 +23,7 @@ class Report(object):
         self.id = None
         self.configuration_id = None
         self.parameters = {}
-        self.start_time = str(datetime.datetime.now().isoformat())
+        self.start_time = str(datetime.datetime.utcnow().strftime(cons.TIMESTAMP_FORMAT))
         self.end_time = None
         self.summary = None
         self.groups = []
@@ -113,7 +114,7 @@ class Report(object):
         the final summary of all ReportGroups.
         """
 
-        self.end_time = str(datetime.datetime.now().isoformat())
+        self.end_time = str(datetime.datetime.utcnow().strftime(cons.TIMESTAMP_FORMAT))
         self.summarize()
 
     def as_json(self):
@@ -140,7 +141,7 @@ class Report(object):
             "testbed_description": "",
             "platform_name": "",
             "platform_description": "",
-            "parameters": self.get_parameters(),
+            "input_parameters": self.get_parameters(),
             "start_time": self.start_time,
             "end_time": self.end_time,
             "status": self.status,
@@ -153,7 +154,8 @@ class Report(object):
                 "repo_url": "https://github.com/ga4gh/htsget-compliance",
                 "dockerhub_url": "",
                 "dockstore_url": ""
-            }
+            },
+            "private": False
         }
     
     def __str__(self):

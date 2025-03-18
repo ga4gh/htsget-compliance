@@ -67,6 +67,8 @@ REFERENCE_CHROM = "11"
 # ENCRYPTION SCHEMES
 ENCRYPTION_SCHEME_CRYPT4GH = "c4gh"  # Specification available at: https://samtools.github.io/hts-specs/crypt4gh.pdf
 
+TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
 DATA_DIR = os.path.join(
     os.path.dirname(
         os.path.dirname(

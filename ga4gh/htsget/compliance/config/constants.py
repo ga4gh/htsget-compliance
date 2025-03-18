@@ -13,7 +13,7 @@ Attributes:
     DEFAULT_VARIANTS_URLPATH (str): unformated url template for variants-related
         requests
     READS_ID_FOUND_1 (str): id for test case(s)
-    READS_ID_FOUND_2 (str): id for test case(s)
+    READS_ID_FILE_BAM (str): id for test case(s)
     READS_ID_NOTFOUND_1 (str): id for test case(s)
     READS_ID_NOTFOUND_2 (str): id for test case(s)
 """
@@ -40,12 +40,14 @@ ID_URLPATH = "/{obj_id}"
 
 # OBJECT IDs FOR TEST CASES
 READS_ID_FOUND_1 = "htsnexus_test_NA12878"
-READS_ID_FOUND_2 = "htsnexus_test_NA12878.bam"
+READS_ID_FILE_BAM = "htsnexus_test_NA12878.bam"
+READS_ID_FILE_CRAM = "htsnexus_test_NA12878.cram"
 READS_ID_NOTFOUND_1 = "notfound123456789"
 READS_ID_NOTFOUND_2 = "notfound987654321"
 
 VARIANTS_ID_FOUND_1 = "spec-v4.3"
-VARIANTS_ID_FOUND_2 = "spec-v4.3.vcf.gz"
+VARIANTS_ID_FILE_VCF = "spec-v4.3.vcf.gz"
+VARIANTS_ID_FILE_BCF = "spec-v4.3.bcf"
 VARIANTS_ID_NOTFOUND_1 = "notfoundmeowmeow"
 VARIANTS_ID_NOTFOUND_1 = "notfoundfoobarbaz"
 

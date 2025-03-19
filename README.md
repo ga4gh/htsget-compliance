@@ -16,7 +16,7 @@ institutions.
 
 ## Installation
 
-First, required pre-requisites are [`samtools`, `bcftools`, `htsfile`](https://www.htslib.org/) and `crypt4gh` are assumed to be pre-installed in the system, i.e:
+First, required pre-requisites are [`samtools`, `bcftools`, `htsfile`](https://www.htslib.org/) and [`crypt4gh`](https://pypi.org/project/crypt4gh/) are assumed to be pre-installed in the system, i.e:
 
 ```shell
 apt-get install samtools uv  (OSX: brew install samtools uv)

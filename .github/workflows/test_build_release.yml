@@ -34,7 +34,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, ubuntu-22.04-arm]
 
-    permissions: write-all
+    permissions:
+      packages: write
     needs: test
     runs-on: ${{ matrix.os }}
     steps:

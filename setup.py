@@ -63,11 +63,11 @@ setuptools.setup(
         [console_scripts]
         htsget-compliance=ga4gh.htsget.compliance.entrypoint:main
     ''',
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Natural Language :: English",
         "Topic :: Scientific/Engineering :: Bio-Informatics"
-    ),
+    ],
 )

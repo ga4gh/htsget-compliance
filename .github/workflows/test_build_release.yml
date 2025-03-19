@@ -3,7 +3,7 @@ name: htsget-compliance
 on: [push, pull_request]
 
 jobs:
-  test_build_release:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -34,7 +34,7 @@ jobs:
       matrix:
       os: [ubuntu-latest, ubuntu-22.04-arm, macos-latest, macos-13]
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - name: Log in to GitHub Container Registry

@@ -3,7 +3,7 @@ name: htsget-compliance
 on: [push, pull_request]
 
 jobs:
-  test:
+  test_build_release:
     runs-on: ubuntu-latest
 
     strategy:
@@ -40,7 +40,16 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.repository }}:latest .
-    - name: Push Docker image
-      run: docker push ghcr.io/${{ github.repository }}:latest
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      with:
+        platforms: linux/amd64,linux/aarch64
+    - name: Docker GitHub release
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: docker/Dockerfile
+        platforms: ${{ matrix.platforms }}
+        push: true
+        tags: |
+          ghcr.io/umccr/htsget-compliance:latest

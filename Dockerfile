@@ -10,6 +10,6 @@ RUN apt-get update -y
 RUN apt-get install -y python3 python3-pip
 RUN python3 -m pip install --upgrade pip
 RUN pip install uv
-RUN uv venv && source .venv/bin/activate && uv pip install -r requirements.txt
+RUN uv venv && . .venv/bin/activate && uv pip install -r requirements.txt
 
 RUN htsget-compliance https://htsget.ga4gh-demo.org/

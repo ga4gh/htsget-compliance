@@ -37,7 +37,8 @@ with open("README.md", "r") as fh:
 install_requires = [
     'click',
     'jsonschema',
-    'requests'
+    'requests',
+    'xsamtools'
 ]
 
 setuptools.setup(

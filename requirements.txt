@@ -11,7 +11,6 @@ jsonschema==4.23.0
 more-itertools==10.6.0
 packaging==24.2
 pluggy==1.5.0
-py==1.11.0
 pyparsing==3.2.1
 pyrsistent==0.20.0
 pytest==8.3.4
@@ -22,3 +21,4 @@ urllib3==2.3.0
 wcwidth==0.2.13
 zipp==3.21.0
 setuptools
+crypt4gh==1.7

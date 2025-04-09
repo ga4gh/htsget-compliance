@@ -2,9 +2,8 @@
 """A single test run against an htsget server"""
 
 import datetime
-import json
-import requests
 from ga4gh.htsget.compliance.config import constants as c
+from ga4gh.htsget.compliance.config import methods
 from ga4gh.htsget.compliance.schema_validator import SchemaValidator
 from ga4gh.htsget.compliance.file_validator import FileValidator
 from ga4gh.htsget.compliance.filepart_aggregator import FilepartAggregator
@@ -21,11 +20,14 @@ class TestCase(object):
         self.set_obj_id(props["obj_id"])
         self.set_expected_response_status(props["expected_response_status"])
         self.set_expected_contents(props["expected_contents"])
+        self.expected_key = props["expected_key"]
         self.set_kwargs(kwargs)
-    
-    def validate_response_code(self, response):
-        if self.get_expected_response_status() != response.status_code:
-            raise Exception("incorrect status code")
+
+    def validate_response_code(self, responses: list):
+        for response in responses:
+            if not (200 <= response.status_code <= 308):
+                if self.get_expected_response_status() != response.status_code:
+                    raise Exception("incorrect status code meow")
     
     def validate_response_schema(self, response):
         response_json = response.json()
@@ -34,12 +36,12 @@ class TestCase(object):
         if validation_result["status"] == SchemaValidator.FAILURE:
             raise Exception(validation_result["message"])
     
-    def validate_file_contents(self, response):
+    def validate_file_contents(self, response, payload, params=None):
         aggregator = FilepartAggregator(response)
-        aggregator.aggregate()
+        aggregator.aggregate(params)
         returned_filepath = aggregator.get_output_filepath()
         expected_filepath = self.get_expected_contents()
-        file_validator = FileValidator(returned_filepath, expected_filepath)
+        file_validator = FileValidator(returned_filepath, expected_filepath, self.expected_key)
         validation_result = file_validator.validate()
         if validation_result == FileValidator.FAILURE:
             raise Exception("returned file does not match expected")
@@ -54,10 +56,16 @@ class TestCase(object):
             params = self.get_url_params()
             report_case.add_debug_msg("URL: " + url)
             report_case.add_debug_msg("PARAMS: " + str(params))
-            response = requests.get(url, params=params)
-            self.validate_response_code(response)
-            self.validate_response_schema(response)
-            self.validate_file_contents(response)
+            # Handle multiple urls and "data:" url types, iterates through all urls returned by htsget
+            payload, responses = methods.fetch_url(url, params)
+            # First request to the "top-level" htsget endpoint, not the individual urls in the response
+            htsget_response = responses[0]
+            # Check whether there's an error code in any of the responses for each url queried above
+            self.validate_response_code(responses)
+            # Validate the htsget response schema, not the payload of the individual URLs
+            self.validate_response_schema(htsget_response)
+            # Check against samtools (and crypt4gh) with local files fetched on the filesystem
+            self.validate_file_contents(htsget_response, payload, params=params)
             report_case.set_status_success()
 
         except Exception as e:

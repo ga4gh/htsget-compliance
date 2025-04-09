@@ -3,8 +3,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg?style=flat-square)](https://www.python.org)
 
-[actions-badge]: https://github.com/ga4gh/htsget-compliance/actions/workflows/test.yml/badge.svg
-[actions-url]: https://github.com/ga4gh/htsget-compliance/actions?query=workflow%3Atest+branch%3Amaster
+[actions-badge]: https://github.com/ga4gh/htsget-compliance/actions/workflows/test_build_release.yml/badge.svg
+[actions-url]: https://github.com/ga4gh/htsget-compliance/actions?query=workflow%3Ahtsget-compliance+branch%3Amaster
 
 # htsget Compliance
 The htsget Compliance Suite determines a web service's compliance with the 
@@ -16,11 +16,28 @@ institutions.
 
 ## Installation
 
-To install, clone the Github repository, then install via setuptools:
+First, required pre-requisites are [`samtools`, `bcftools`, `htsfile`](https://www.htslib.org/) and [`crypt4gh`](https://pypi.org/project/crypt4gh/) are assumed to be pre-installed in the system, i.e:
+
+```shell
+apt-get install samtools bcftools tabix uv  (OSX: brew install samtools uv)
+uv venv .
+pip install crypt4gh
 ```
+To install `htsget-compliance`, clone the Github repository, then install via setuptools in a new virtual environment.
+
+Create a new virtual environment:
+
+```sh
 git clone https://github.com/ga4gh/htsget-compliance.git
 cd htsget-compliance
-python setup.py install
+
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install the package:
+```sh
+pip install -e .
 ```
 
 ## Quickstart
@@ -28,7 +45,7 @@ python setup.py install
 Running the following:
 
 ```shell
-% htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
+htsget-compliance https://htsget.ga4gh-demo.org  | jq '.["summary"]'
 ```
 
 Should ideally yield:
@@ -59,8 +76,6 @@ Additional commandline options can be specified to:
 * etc.
 
 A full list of options can be displayed via `htsget-compliance --help`
-
-Requires [`Samtools` suite](http://www.htslib.org/) to be available in your path
 
 ## License
 

@@ -89,7 +89,7 @@ def main(**kwargs):
         header = {"GA4GH-TestbedReportSeriesId": kwargs["submit_id"], "GA4GH-TestbedReportSeriesToken": kwargs["submit_token"]}
         response = requests.post(kwargs["testbed_url"], headers=header, json=json.loads(str(report)))
         if response.status_code == 200:
-            print("The submission was successful, the report ID is " + "")
+            print("The submission was successful, the report ID is " + report.get_id())
         else:
             print("The submission failed with a status code of " + str(response.status_code))
             print("Error Message: " + str(response.content))

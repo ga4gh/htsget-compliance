@@ -34,8 +34,13 @@ from ga4gh.testbed.models.report_group import ReportGroup
               help="base url path to 'variants' requests",
               default=c.DEFAULT_VARIANTS_URLPATH)
 @click.option('-f', '--file', help="report written to output file")
-@click.option('-t', '--testbed-url', 
-    help="report submitted as POST request body to GA4GH testbed service")
+@click.option('-s', '--submit', is_flag = True, help='Submit JSON report to testbedAPI')
+@click.option(
+    '--submit-id', help='report series ID required by GA4GH testbed')  
+@click.option(
+    '--submit-token', help='report series token required by GA4GH testbed') 
+@click.option(
+    '-t', '--testbed-url', default="http://localhost:4500/reports", help='submit report to GA4GH testbed service')
 def main(**kwargs):
     """run compliance tests against htsget service"""
 
@@ -46,7 +51,8 @@ def main(**kwargs):
     report = Report()
     report.set_id(uniqid)
     report.set_configuration_id(configuration_id)
-    report.set_parameters(kwargs)
+    params = {'server': kwargs["htsget_url"]}
+    report.set_parameters(params)
 
     # for each endpoint (reads, variants), create an empty ReportGroup. Run all
     # test cases in the associated test group, and add each ReportCase to the 
@@ -57,23 +63,37 @@ def main(**kwargs):
     for endpoint in c.ENDPOINTS:
         group = ReportGroup()
         group.set_name(endpoint)
+        group.set_start_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
         cases = TEST_GROUPS[endpoint]["cases"]
         for case_props in cases:
             test_case_obj = TestCase(case_props, kwargs)
             report_case = test_case_obj.execute_test()
             group.add_case(report_case)
+
+        group.set_end_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
         group.summarize()
         report.add_group(group)
     
     # summarize the Report
     report.finalize()
     
-    # write report to file and/or submit report as POST request to testbed
-    if kwargs["file"] or kwargs["testbed_url"]:
+    # write report to file
+    if kwargs["file"]:
         if kwargs["file"]:
-            open(kwargs["file"], 'w').write(str(report))
-        elif kwargs["testbed_url"]:
-            requests.post(kwargs["testbed_url"], json=report.as_json())
+            open(kwargs["file"], 'w').write(str(report.as_json()))
+
+    # submit report to testbed
+    if kwargs["testbed_url"] and kwargs["submit"] and kwargs["submit_id"] and kwargs["submit_token"]:
+        print("Attempting to submit to testbed API...")
+        header = {"GA4GH-TestbedReportSeriesId": kwargs["submit_id"], "GA4GH-TestbedReportSeriesToken": kwargs["submit_token"]}
+        response = requests.post(kwargs["testbed_url"], headers=header, json=json.loads(str(report)))
+        if response.status_code == 200:
+            # prints the submit ID for the report from the testbed service
+            print("The submission was successful, the report ID is " + response.json()["id"])
+        else:
+            print("The submission failed with a status code of " + str(response.status_code))
+            print("Error Message: " + str(response.content))
+    
     # print report if it's neither written to file or sent to testbed
-    else:
+    if not kwargs["submit"] or not kwargs["file"]:
         print(str(report))

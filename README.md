@@ -77,6 +77,15 @@ Additional commandline options can be specified to:
 
 A full list of options can be displayed via `htsget-compliance --help`
 
+## Submitting Reports
+
+The report can optionally be submitted to a local or hosted GA4GH Testbed Service with additional commandline options. While running the [GA4GH Testbed API](https://github.com/ga4gh/ga4gh-testbed-api), you can submit reports to your local instance with the following: 
+```
+htsget-compliance https://htsget.ga4gh-demo.org/  -s --submit-id 1edb5213-52a2-434f-a7b8-b101fea8fb30 --submit-token K5pLbwScVu8rEoLLj8pRy5Wv7EXTVahn --testbed-url http://localhost:4500/reports
+```
+
+If the [GA4GH Testbed UI](https://github.com/ga4gh/ga4gh-testbed-ui) is also running you can then see the report displayed on a web UI (ex. http://localhost:4500/).
+
 ## License
 
 See the [LICENSE](https://github.com/ga4gh/htsget-compliance/blob/master/LICENSE)

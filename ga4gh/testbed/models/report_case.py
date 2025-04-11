@@ -2,6 +2,7 @@
 """Testbed ReportCase, reports on a single compliance test case"""
 
 from ga4gh.testbed import constants as c
+from ga4gh.testbed.models.report_summary import ReportSummary
 
 class ReportCase(object):
     """Reports on a single compliance test case
@@ -24,6 +25,10 @@ class ReportCase(object):
         self.info = []
         self.warn = []
         self.error = None
+        self.start_time = None
+        self.end_time = None
+        self.summary = None
+        self.cases = []
     
     def set_name(self, name):
         """set name
@@ -42,6 +47,15 @@ class ReportCase(object):
         """
 
         return self.name
+
+    def add_case(self, case_obj):
+        """add a Case to the group
+
+        Args:
+            case_obj (Case): object to add to group
+        """
+
+        self.cases.append(case_obj)
     
     def set_status_success(self):
         """set status to 'successful'"""
@@ -144,6 +158,46 @@ class ReportCase(object):
 
         return self.error
 
+    def set_start_time(self, start_time):
+        """set start time for case
+        Args:
+            start_time (str): datetime
+        """
+        self.start_time = start_time
+
+    def set_end_time(self, end_time):  
+        """set end time for case
+        Args:
+            end_time (str): datetime
+        """  
+        self.end_time = end_time
+
+    def summarize(self):
+        """Summarize completed test report cases for the entire group
+
+        Once all ReportCase objects in the group's "cases" list are completed
+        (ie. validation methods have been run and case object properties
+        finalized), this method will summarize/aggregate the pass,failure,
+        warning, skipped counts into a single ReportSummary object, which is
+        then set to the 'summary' property.
+        """
+
+        def increment_summary(summary_obj, case_obj):
+            """increment ReportSummary count was ReportCase status
+
+            Whatever the status of the case object, the corresponding property
+            will be incremented by 1 in the summary object
+
+            Args:
+                summary_obj (ReportSummary): summary object to increment
+                case_obj (ReportCase): case object
+            """
+            summary_obj.increment(case_obj.get_status())
+
+        summary = ReportSummary()
+        [increment_summary(summary, case) for case in self.cases]
+        self.summary = summary
+
     def as_json(self):
         """Dump ReportCase object as simple python dictionary
 
@@ -156,10 +210,22 @@ class ReportCase(object):
         """
 
         return {
-            "name": self.name,
+            "test_name": self.name,
+            "test_description": "Test to check if info-endpoint returns 200 OK with appropriate headers",
+            "start_time": self.start_time,
+            "end_time": self.end_time,
             "status": self.get_status(),
-            "debug": self.get_debug(),
-            "info": self.get_info(),
-            "warn": self.get_warn(),
-            "error": self.get_error()
+            "summary": self.summary.as_json(),
+            "message": "",
+            "cases": [
+                {
+                    "case_name": self.name,
+                    "case_description": "Test to check if info-endpoint returns 200 OK with appropriate headers",
+                    "log_messages": [],
+                    "start_time": self.start_time,
+                    "end_time": self.end_time,
+                    "status": self.get_status(),
+                    "message": ""
+                }
+            ]
         }

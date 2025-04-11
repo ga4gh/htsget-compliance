@@ -6,8 +6,12 @@ from ga4gh.testbed import constants as c
 
 data = [
     {
-        "name": "test case a",
+        "test_name": "test case a",
+        "test_description": "",
+        "start_time": "",
+        "end_time": "",
         "status": c.RESULT_FAILURE,
+        "summary": {},
         "debug": [
             "first debug message",
             "second debug message"
@@ -15,16 +19,24 @@ data = [
         "error": "an error occurred"
     },
     {
-        "name": "htsget test case",
+        "test_name": "htsget test case",
+        "test_description": "",
+        "start_time": "",
+        "end_time": "",
         "status": c.RESULT_SUCCESS,
+        "summary": {},
         "info": [
             "first info message",
             "second info message"
         ]
     },
     {
-        "name": "test refget service",
+        "test_name": "test refget service",
+        "test_description": "",
+        "start_time": "",
+        "end_time": "",
         "status": c.RESULT_WARNING,
+        "summary": {},
         "warn": [
             "first warning message",
             "second warning message"
@@ -37,8 +49,8 @@ def test_name():
 
     case = ReportCase()
     for case_info in data:
-        case.set_name(case_info["name"])
-        assert case.get_name() == case_info["name"]
+        case.set_name(case_info["test_name"])
+        assert case.get_name() == case_info["test_name"]
 
 def test_status():
     """pytest: test set/get status"""
@@ -89,7 +101,7 @@ def test_as_json():
 
     for case_info in data:
         case = ReportCase()
-        case.set_name(case_info["name"])
+        case.set_name(case_info["test_name"])
         set_status = {
             c.RESULT_SUCCESS: case.set_status_success,
             c.RESULT_WARNING: case.set_status_warning,
@@ -101,7 +113,7 @@ def test_as_json():
             "info": case.add_info_msg,
             "warn": case.add_warn_msg
         }
-
+        case.summarize()
         set_status[case_info["status"]]()
 
         for key in ["debug", "info", "warn"]:
@@ -111,7 +123,7 @@ def test_as_json():
 
         if "error" in case_info.keys():
             case.set_error(case_info["error"])
-        
+            
         json = case.as_json()
-        assert json["name"] == case_info["name"]
+        assert json["test_name"] == case_info["test_name"]
         assert json["status"] == case_info["status"]

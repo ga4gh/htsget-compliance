@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """A single test run against an htsget server"""
 
+import datetime
 from ga4gh.htsget.compliance.config import constants as c
 from ga4gh.htsget.compliance.config import methods
 from ga4gh.htsget.compliance.schema_validator import SchemaValidator
@@ -49,7 +50,7 @@ class TestCase(object):
         
         report_case = ReportCase()
         report_case.set_name(self.get_name())
-
+        report_case.set_start_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
         try:
             url = self.get_formatted_url()
             params = self.get_url_params()
@@ -71,7 +72,10 @@ class TestCase(object):
             # any raised exceptions will set the ReportCase status to failure
             report_case.set_status_failure()
             report_case.set_error(str(e))
-        
+        report_case.add_case(report_case)
+        report_case.summarize()
+        report_case.set_end_time(str(datetime.datetime.utcnow().strftime(c.TIMESTAMP_FORMAT)))
+
         return report_case
     
     def set_name(self, name):

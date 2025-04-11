@@ -141,7 +141,8 @@ class ReportSummary(object):
         """
 
         return {
-            "run": self.run,
+            #"run": self.run,
+            "unknown": 0,
             "passed": self.passed,
             "warned": self.warned,
             "failed": self.failed,

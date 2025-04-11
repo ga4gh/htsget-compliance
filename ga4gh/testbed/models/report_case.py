@@ -159,9 +159,17 @@ class ReportCase(object):
         return self.error
 
     def set_start_time(self, start_time):
+        """set start time for case
+        Args:
+            start_time (str): datetime
+        """
         self.start_time = start_time
 
-    def set_end_time(self, end_time):    
+    def set_end_time(self, end_time):  
+        """set end time for case
+        Args:
+            end_time (str): datetime
+        """  
         self.end_time = end_time
 
     def summarize(self):

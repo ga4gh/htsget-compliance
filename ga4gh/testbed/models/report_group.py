@@ -52,9 +52,17 @@ class ReportGroup(object):
         return self.name
 
     def set_start_time(self, start_time):
+        """set start time for phase
+        Args:
+            start_time (str): datetime
+        """
         self.start_time = start_time
 
     def set_end_time(self, end_time):    
+        """set end time for phase
+        Args:
+            end_time (str): datetime
+        """
         self.end_time = end_time
     
     def summarize(self):

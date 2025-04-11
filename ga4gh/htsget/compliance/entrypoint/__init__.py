@@ -36,9 +36,9 @@ from ga4gh.testbed.models.report_group import ReportGroup
 @click.option('-f', '--file', help="report written to output file")
 @click.option('-s', '--submit', is_flag = True, help='Submit JSON report to testbedAPI')
 @click.option(
-    '--submit-id', help='report series ID')  
+    '--submit-id', help='report series ID required by GA4GH testbed')  
 @click.option(
-    '--submit-token', help='report series token') 
+    '--submit-token', help='report series token required by GA4GH testbed') 
 @click.option(
     '-t', '--testbed-url', default="http://localhost:4500/reports", help='submit report to GA4GH testbed service')
 def main(**kwargs):
@@ -85,11 +85,11 @@ def main(**kwargs):
     # submit report to testbed
     if kwargs["testbed_url"] and kwargs["submit"] and kwargs["submit_id"] and kwargs["submit_token"]:
         print("Attempting to submit to testbed API...")
-        #print(json.loads(report.as_json()))
         header = {"GA4GH-TestbedReportSeriesId": kwargs["submit_id"], "GA4GH-TestbedReportSeriesToken": kwargs["submit_token"]}
         response = requests.post(kwargs["testbed_url"], headers=header, json=json.loads(str(report)))
         if response.status_code == 200:
-            print("The submission was successful, the report ID is " + report.get_id())
+            # prints the submit ID for the report from the testbed service
+            print("The submission was successful, the report ID is " + response.json()["id"])
         else:
             print("The submission failed with a status code of " + str(response.status_code))
             print("Error Message: " + str(response.content))
